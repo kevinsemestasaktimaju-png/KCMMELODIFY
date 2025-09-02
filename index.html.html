@@ -1,15 +1,9 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-
-<!-- Firebase SDKs (compat version) -->
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KCM MELODIFY</title>
+    <title>Sistem Les Musik - Realtime</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -104,18 +98,6 @@
             font-weight: 600;
         }
         
-        .schedule-card {
-            border-left: 4px solid var(--primary-color);
-        }
-        
-        .schedule-card.completed {
-            border-left-color: var(--secondary-color);
-        }
-        
-        .schedule-card.cancelled {
-            border-left-color: var(--danger-color);
-        }
-        
         .btn-primary-custom {
             background-color: var(--primary-color);
             border: none;
@@ -129,223 +111,85 @@
             background-color: #2980b9;
         }
         
-        .btn-success-custom {
-            background-color: var(--secondary-color);
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-        
-        .btn-success-custom:hover {
-            background-color: #27ae60;
-        }
-        
-        .video-item {
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 15px;
-            transition: all 0.3s;
-        }
-        
-        .video-item:hover {
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .video-thumbnail {
-            width: 100%;
-            height: 150px;
-            background-color: #f0f0f0;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 10px;
-            overflow: hidden;
-        }
-        
-        .video-thumbnail video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .user-info {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        .user-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: var(--primary-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .realtime-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
             color: white;
-            font-size: 20px;
-            margin-right: 15px;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .realtime-status.connected {
+            background: rgba(46, 204, 113, 0.9);
+        }
+        
+        .realtime-status.disconnected {
+            background: rgba(231, 76, 60, 0.9);
+        }
+        
+        .sync-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
+        .firebase-debug {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 12px;
+            max-width: 300px;
+            z-index: 1000;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .debug-log {
+            margin: 5px 0;
+            padding: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
         }
         
         .hidden {
             display: none;
         }
         
-        .form-control:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
+        .admin-only {
+            display: none;
         }
         
-        .table th {
-            background-color: var(--dark-color);
-            color: white;
-        }
-        
-        .alert {
-            border: none;
-            border-radius: 5px;
-        }
-        
-        .grade-card {
-            border-left: 4px solid var(--primary-color);
-            margin-bottom: 15px;
-        }
-        
-        .grade-excellent {
-            border-left-color: var(--secondary-color);
-        }
-        
-        .grade-good {
-            border-left-color: var(--primary-color);
-        }
-        
-        .grade-average {
-            border-left-color: var(--warning-color);
-        }
-        
-        .grade-poor {
-            border-left-color: var(--danger-color);
-        }
-        
-        .score-badge {
-            font-size: 1.2rem;
-            font-weight: bold;
-            padding: 5px 10px;
-            border-radius: 5px;
-        }
-        
-        .score-excellent {
-            background-color: var(--secondary-color);
-            color: white;
-        }
-        
-        .score-good {
-            background-color: #3498db;
-            color: white;
-        }
-        
-        .score-average {
-            background-color: var(--warning-color);
-            color: white;
-        }
-        
-        .score-poor {
-            background-color: var(--danger-color);
-            color: white;
-        }
-        
-        .video-upload-area {
-            border: 2px dashed #ccc;
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .video-upload-area:hover {
-            border-color: var(--primary-color);
-            background-color: rgba(52, 152, 219, 0.05);
-        }
-        
-        .video-upload-area.dragover {
-            border-color: var(--secondary-color);
-            background-color: rgba(46, 204, 113, 0.1);
-        }
-        
-        .video-preview {
-            max-width: 100%;
-            max-height: 200px;
-            border-radius: 5px;
-            margin-top: 10px;
-        }
-        
-        .video-type-toggle {
-            display: flex;
-            margin-bottom: 15px;
-            border-radius: 5px;
-            overflow: hidden;
-        }
-        
-        .video-type-toggle .btn {
-            flex: 1;
-            border-radius: 0;
-        }
-        
-        .video-type-toggle .btn:first-child {
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
-        }
-        
-        .video-type-toggle .btn:last-child {
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-        }
-        
-        .video-type-toggle .btn.active {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        
-        @media (max-width: 768px) {
-            .sidebar {
-                min-height: auto;
-                margin-bottom: 20px;
-            }
-            
-            .content {
-                min-height: auto;
-            }
+        .student-only {
+            display: none;
         }
     </style>
-
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyCUkpNvGbL6u6lO--A-CVRo7l_YonbfLqE",
-    authDomain: "kcmmelodify.firebaseapp.com",
-    projectId: "kcmmelodify",
-    storageBucket: "kcmmelodify.appspot.com",
-    messagingSenderId: "125757359761",
-    appId: "1:125757359761:web:00bd9bdefcac27ae0ba130",
-    measurementId: "G-FJFD3P7V6B"
-  };
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.firestore();
-</script>
-
 </head>
 <body>
     <!-- Login Page -->
     <div id="loginPage" class="login-container">
         <div class="login-card">
             <div class="login-header">
-                <h3><i class="fas fa-music me-2"></i>KCM MELODIFY</h3>
+                <h3><i class="fas fa-music me-2"></i>Sistem Les Musik</h3>
                 <p class="mb-0">Silakan login untuk melanjutkan</p>
             </div>
             <div class="login-body">
@@ -371,6 +215,7 @@
             </div>
         </div>
     </div>
+
     <!-- Dashboard -->
     <div id="dashboardPage" class="hidden">
         <!-- Header -->
@@ -378,7 +223,7 @@
             <div class="container-fluid">
                 <div class="row align-items-center">
                     <div class="col-md-6">
-                        <h3 class="mb-0"><i class="fas fa-music me-2"></i>Kcm Class</h3>
+                        <h3 class="mb-0"><i class="fas fa-music me-2"></i>Sistem Les Musik</h3>
                     </div>
                     <div class="col-md-6 text-end">
                         <span id="userRole" class="me-3"></span>
@@ -461,19 +306,8 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- Student Grades Summary (for students only) -->
-                        <div id="studentGradesSummary" class="card mt-4 student-only">
-                            <div class="card-header">
-                                <h5 class="mb-0">Nilai Terbaru</h5>
-                            </div>
-                            <div class="card-body">
-                                <div id="recentGrades">
-                                    <p class="text-center text-muted">Belum ada nilai</p>
-                                </div>
-                            </div>
-                        </div>
                     </div>
+                    
                     <!-- Schedule Page -->
                     <div id="schedule" class="content-page hidden">
                         <h4 class="mb-4">Jadwal Les</h4>
@@ -500,6 +334,7 @@
                             </div>
                         </div>
                     </div>
+                    
                     <!-- Videos Page -->
                     <div id="videos" class="content-page hidden">
                         <h4 class="mb-4">Video Pembelajaran</h4>
@@ -507,8 +342,9 @@
                             <p class="text-center text-muted">Tidak ada video pembelajaran tersedia</p>
                         </div>
                     </div>
-                    <!-- Grades Page (Student Only) -->
-                    <div id="grades" class="content-page hidden student-page">
+                    
+                    <!-- Grades Page -->
+                    <div id="grades" class="content-page hidden">
                         <h4 class="mb-4">Nilai Saya</h4>
                         <div class="card">
                             <div class="card-body">
@@ -518,13 +354,14 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Manage Users Page (Admin Only) -->
+                    
+                    <!-- Manage Users Page -->
                     <div id="manage-users" class="content-page hidden admin-page">
                         <h4 class="mb-4">Kelola Pengguna</h4>
                         <div class="card">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h5 class="mb-0">Daftar Pengguna</h5>
-                                <button class="btn btn-success-custom btn-sm" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                                <button class="btn btn-primary-custom btn-sm" data-bs-toggle="modal" data-bs-target="#addUserModal">
                                     <i class="fas fa-plus me-1"></i>Tambah Pengguna
                                 </button>
                             </div>
@@ -548,13 +385,14 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Manage Schedule Page (Admin Only) -->
+                    
+                    <!-- Manage Schedule Page -->
                     <div id="manage-schedule" class="content-page hidden admin-page">
                         <h4 class="mb-4">Kelola Jadwal</h4>
                         <div class="card">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h5 class="mb-0">Daftar Jadwal Les</h5>
-                                <button class="btn btn-success-custom btn-sm" data-bs-toggle="modal" data-bs-target="#addScheduleModal">
+                                <button class="btn btn-primary-custom btn-sm" data-bs-toggle="modal" data-bs-target="#addScheduleModal">
                                     <i class="fas fa-plus me-1"></i>Tambah Jadwal
                                 </button>
                             </div>
@@ -582,13 +420,14 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Manage Videos Page (Admin Only) -->
+                    
+                    <!-- Manage Videos Page -->
                     <div id="manage-videos" class="content-page hidden admin-page">
                         <h4 class="mb-4">Kelola Video</h4>
                         <div class="card">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h5 class="mb-0">Daftar Video Pembelajaran</h5>
-                                <button class="btn btn-success-custom btn-sm" data-bs-toggle="modal" data-bs-target="#addVideoModal">
+                                <button class="btn btn-primary-custom btn-sm" data-bs-toggle="modal" data-bs-target="#addVideoModal">
                                     <i class="fas fa-plus me-1"></i>Tambah Video
                                 </button>
                             </div>
@@ -599,13 +438,14 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Manage Grades Page (Admin Only) -->
+                    
+                    <!-- Manage Grades Page -->
                     <div id="manage-grades" class="content-page hidden admin-page">
                         <h4 class="mb-4">Kelola Nilai</h4>
                         <div class="card">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h5 class="mb-0">Daftar Nilai Murid</h5>
-                                <button class="btn btn-success-custom btn-sm" data-bs-toggle="modal" data-bs-target="#addGradeModal">
+                                <button class="btn btn-primary-custom btn-sm" data-bs-toggle="modal" data-bs-target="#addGradeModal">
                                     <i class="fas fa-plus me-1"></i>Tambah Nilai
                                 </button>
                             </div>
@@ -636,6 +476,19 @@
             </div>
         </div>
     </div>
+
+    <!-- Realtime Status Indicator -->
+    <div id="realtimeStatus" class="realtime-status disconnected">
+        <span class="sync-indicator"></span>
+        <span>Offline Mode</span>
+    </div>
+
+    <!-- Firebase Debug Panel -->
+    <div id="firebaseDebug" class="firebase-debug">
+        <div><strong>Firebase Debug:</strong></div>
+        <div id="debugLogs"></div>
+    </div>
+
     <!-- Add User Modal -->
     <div class="modal fade" id="addUserModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
@@ -670,6 +523,7 @@
             </div>
         </div>
     </div>
+
     <!-- Add Schedule Modal -->
     <div class="modal fade" id="addScheduleModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
@@ -719,6 +573,7 @@
             </div>
         </div>
     </div>
+
     <!-- Add Video Modal -->
     <div class="modal fade" id="addVideoModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
@@ -729,36 +584,13 @@
                 </div>
                 <div class="modal-body">
                     <form id="addVideoForm">
-                        <div class="video-type-toggle">
-                            <button type="button" class="btn btn-outline-primary active" id="youtubeVideoBtn">YouTube</button>
-                            <button type="button" class="btn btn-outline-primary" id="uploadVideoBtn">Upload Video</button>
-                        </div>
-                        
-                        <!-- YouTube Video Section -->
-                        <div id="youtubeVideoSection">
-                            <div class="mb-3">
-                                <label for="videoUrl" class="form-label">URL Video (YouTube)</label>
-                                <input type="text" class="form-control" id="videoUrl" placeholder="https://www.youtube.com/watch?v=...">
-                            </div>
-                        </div>
-                        
-                        <!-- Upload Video Section -->
-                        <div id="uploadVideoSection" class="hidden">
-                            <div class="mb-3">
-                                <label class="form-label">Upload Video</label>
-                                <div class="video-upload-area" id="videoUploadArea">
-                                    <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
-                                    <p>Klik atau drag & drop video di sini</p>
-                                    <p class="text-muted small">Format: MP4, WebM, OGG (Maksimal 50MB)</p>
-                                    <input type="file" id="videoFile" accept="video/*" class="hidden">
-                                </div>
-                                <video id="videoPreview" class="video-preview hidden" controls></video>
-                            </div>
-                        </div>
-                        
                         <div class="mb-3">
                             <label for="videoTitle" class="form-label">Judul Video</label>
                             <input type="text" class="form-control" id="videoTitle" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="videoUrl" class="form-label">URL Video (YouTube)</label>
+                            <input type="text" class="form-control" id="videoUrl" placeholder="https://www.youtube.com/watch?v=..." required>
                         </div>
                         <div class="mb-3">
                             <label for="videoDescription" class="form-label">Deskripsi</label>
@@ -773,6 +605,7 @@
             </div>
         </div>
     </div>
+
     <!-- Add Grade Modal -->
     <div class="modal fade" id="addGradeModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
@@ -818,6 +651,7 @@
             </div>
         </div>
     </div>
+
     <!-- Edit User Modal -->
     <div class="modal fade" id="editUserModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
@@ -853,6 +687,7 @@
             </div>
         </div>
     </div>
+
     <!-- Edit Schedule Modal -->
     <div class="modal fade" id="editScheduleModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
@@ -903,6 +738,7 @@
             </div>
         </div>
     </div>
+
     <!-- Edit Video Modal -->
     <div class="modal fade" id="editVideoModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
@@ -914,39 +750,13 @@
                 <div class="modal-body">
                     <form id="editVideoForm">
                         <input type="hidden" id="editVideoId">
-                        <input type="hidden" id="editVideoType">
-                        <input type="hidden" id="editVideoData">
-                        
-                        <div class="video-type-toggle">
-                            <button type="button" class="btn btn-outline-primary active" id="editYoutubeVideoBtn">YouTube</button>
-                            <button type="button" class="btn btn-outline-primary" id="editUploadVideoBtn">Upload Video</button>
-                        </div>
-                        
-                        <!-- YouTube Video Section -->
-                        <div id="editYoutubeVideoSection">
-                            <div class="mb-3">
-                                <label for="editVideoUrl" class="form-label">URL Video (YouTube)</label>
-                                <input type="text" class="form-control" id="editVideoUrl" placeholder="https://www.youtube.com/watch?v=...">
-                            </div>
-                        </div>
-                        
-                        <!-- Upload Video Section -->
-                        <div id="editUploadVideoSection" class="hidden">
-                            <div class="mb-3">
-                                <label class="form-label">Upload Video</label>
-                                <div class="video-upload-area" id="editVideoUploadArea">
-                                    <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
-                                    <p>Klik atau drag & drop video di sini</p>
-                                    <p class="text-muted small">Format: MP4, WebM, OGG (Maksimal 50MB)</p>
-                                    <input type="file" id="editVideoFile" accept="video/*" class="hidden">
-                                </div>
-                                <video id="editVideoPreview" class="video-preview hidden" controls></video>
-                            </div>
-                        </div>
-                        
                         <div class="mb-3">
                             <label for="editVideoTitle" class="form-label">Judul Video</label>
                             <input type="text" class="form-control" id="editVideoTitle" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editVideoUrl" class="form-label">URL Video (YouTube)</label>
+                            <input type="text" class="form-control" id="editVideoUrl" placeholder="https://www.youtube.com/watch?v=..." required>
                         </div>
                         <div class="mb-3">
                             <label for="editVideoDescription" class="form-label">Deskripsi</label>
@@ -961,6 +771,7 @@
             </div>
         </div>
     </div>
+
     <!-- Edit Grade Modal -->
     <div class="modal fade" id="editGradeModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
@@ -1007,37 +818,262 @@
             </div>
         </div>
     </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
     <script>
+        // ======================================================
+        // FIREBASE CONFIGURATION
+        // ======================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyCUkpNvGbL6u6lO--A-CVRo7l_YonbfLqE",
+            authDomain: "kcmmelodify.firebaseapp.com",
+            databaseURL: "https://kcmmelodify-default-rtdb.firebaseio.com",
+            projectId: "kcmmelodify",
+            storageBucket: "kcmmelodify.firebasestorage.app",
+            messagingSenderId: "125757359761",
+            appId: "1:125757359761:web:00bd9bdefcac27ae0ba130",
+            measurementId: "G-FJFD3P7V6B"
+        };
+
+        // ======================================================
+        // FIREBASE INITIALIZATION & FUNCTIONS
+        // ======================================================
+        
+        // Initialize Firebase
+        let firebaseApp;
+        let database;
+        let isOnline = false;
+        let currentUser = null;
+
+        function initializeFirebase() {
+            try {
+                firebaseApp = firebase.initializeApp(firebaseConfig);
+                database = firebase.database();
+                addDebugLog("Firebase initialized successfully");
+                return true;
+            } catch (error) {
+                addDebugLog("Firebase initialization failed: " + error.message);
+                return false;
+            }
+        }
+
+        // Debug logging function
+        function addDebugLog(message) {
+            const debugLogs = document.getElementById('debugLogs');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = 'debug-log';
+            logEntry.textContent = `[${timestamp}] ${message}`;
+            debugLogs.appendChild(logEntry);
+            
+            // Keep only last 10 logs
+            while (debugLogs.children.length > 10) {
+                debugLogs.removeChild(debugLogs.firstChild);
+            }
+            
+            console.log(message);
+        }
+
+        // Update connection status
+        function updateConnectionStatus(connected) {
+            const statusEl = document.getElementById('realtimeStatus');
+            const text = statusEl.querySelector('span:last-child');
+            
+            if (connected) {
+                statusEl.className = 'realtime-status connected';
+                text.textContent = 'Realtime Connected';
+            } else {
+                statusEl.className = 'realtime-status disconnected';
+                text.textContent = 'Offline Mode';
+            }
+            
+            isOnline = connected;
+        }
+
+        // Check connection status
+        function checkConnection() {
+            if (!database) return;
+            
+            const connectedRef = database.ref(".info/connected");
+            connectedRef.on("value", (snapshot) => {
+                updateConnectionStatus(snapshot.val());
+            });
+        }
+
+        // Save data to Firebase
+        function saveDataToFirebase() {
+            if (!database || !isOnline) {
+                addDebugLog("Cannot save: Firebase not connected");
+                return;
+            }
+
+            const data = {
+                users: JSON.parse(localStorage.getItem('users') || '[]'),
+                schedules: JSON.parse(localStorage.getItem('schedules') || '[]'),
+                videos: JSON.parse(localStorage.getItem('videos') || '[]'),
+                grades: JSON.parse(localStorage.getItem('grades') || '[]'),
+                lastUpdated: new Date().toISOString(),
+                updatedBy: currentUser ? currentUser.username : 'unknown'
+            };
+
+            addDebugLog("Saving data to Firebase...");
+            
+            database.ref('sistem-les-musik').set(data)
+                .then(() => {
+                    addDebugLog("Data saved successfully to Firebase");
+                })
+                .catch((error) => {
+                    addDebugLog("Failed to save to Firebase: " + error.message);
+                });
+        }
+
+        // Load data from Firebase
+        function loadDataFromFirebase() {
+            if (!database) {
+                addDebugLog("Cannot load: Firebase not initialized");
+                return;
+            }
+
+            addDebugLog("Loading data from Firebase...");
+            
+            database.ref('sistem-les-musik').once('value')
+                .then((snapshot) => {
+                    const data = snapshot.val();
+                    
+                    if (data) {
+                        addDebugLog("Data found in Firebase");
+                        
+                        // Update localStorage
+                        localStorage.setItem('users', JSON.stringify(data.users || []));
+                        localStorage.setItem('schedules', JSON.stringify(data.schedules || []));
+                        localStorage.setItem('videos', JSON.stringify(data.videos || []));
+                        localStorage.setItem('grades', JSON.stringify(data.grades || []));
+                        
+                        addDebugLog("Local storage updated with Firebase data");
+                        
+                        // Refresh current page
+                        const activePage = document.querySelector('.nav-link.active');
+                        if (activePage) {
+                            const pageName = activePage.getAttribute('data-page');
+                            refreshPage(pageName);
+                        }
+                    } else {
+                        addDebugLog("No data found in Firebase");
+                    }
+                })
+                .catch((error) => {
+                    addDebugLog("Failed to load from Firebase: " + error.message);
+                });
+        }
+
+        // Setup realtime listener
+        function setupRealtimeListener() {
+            if (!database) return;
+            
+            addDebugLog("Setting up realtime listener...");
+            
+            database.ref('sistem-les-musik').on('value', (snapshot) => {
+                const data = snapshot.val();
+                
+                if (data) {
+                    addDebugLog("Realtime update received");
+                    
+                    // Update localStorage
+                    localStorage.setItem('users', JSON.stringify(data.users || []));
+                    localStorage.setItem('schedules', JSON.stringify(data.schedules || []));
+                    localStorage.setItem('videos', JSON.stringify(data.videos || []));
+                    localStorage.setItem('grades', JSON.stringify(data.grades || []));
+                    
+                    // Refresh current page if user is not the one who made the change
+                    if (data.updatedBy !== (currentUser ? currentUser.username : 'unknown')) {
+                        const activePage = document.querySelector('.nav-link.active');
+                        if (activePage) {
+                            const pageName = activePage.getAttribute('data-page');
+                            refreshPage(pageName);
+                            addDebugLog("Page refreshed due to realtime update");
+                        }
+                    }
+                }
+            });
+        }
+
+        // Refresh page content
+        function refreshPage(pageName) {
+            switch(pageName) {
+                case 'dashboard':
+                    loadDashboard();
+                    break;
+                case 'schedule':
+                    loadSchedule();
+                    break;
+                case 'videos':
+                    loadVideos();
+                    break;
+                case 'grades':
+                    loadGrades();
+                    break;
+                case 'manage-users':
+                    loadManageUsers();
+                    break;
+                case 'manage-schedule':
+                    loadManageSchedule();
+                    break;
+                case 'manage-videos':
+                    loadManageVideos();
+                    break;
+                case 'manage-grades':
+                    loadManageGrades();
+                    break;
+            }
+        }
+
+        // ======================================================
+        // ORIGINAL APP FUNCTIONS (MODIFIED FOR FIREBASE)
+        // ======================================================
+
         // Initialize data if not exists
-        if (!localStorage.getItem('users')) {
-            const defaultUsers = [
-                { id: 1, username: 'admin', password: 'admin123', role: 'admin' },
-                { id: 2, username: 'murid', password: 'murid123', role: 'murid' }
-            ];
-            localStorage.setItem('users', JSON.stringify(defaultUsers));
+        function initializeData() {
+            if (!localStorage.getItem('users')) {
+                const defaultUsers = [
+                    { id: 1, username: 'admin', password: 'admin123', role: 'admin' },
+                    { id: 2, username: 'murid', password: 'murid123', role: 'murid' }
+                ];
+                localStorage.setItem('users', JSON.stringify(defaultUsers));
+                addDebugLog("Default users initialized");
+            }
+            
+            if (!localStorage.getItem('schedules')) {
+                const defaultSchedules = [
+                    { id: 1, date: getCurrentDate(), time: '10:00', student: 'murid', teacher: 'Budi Santoso', subject: 'Piano', status: 'terjadwal' },
+                    { id: 2, date: getCurrentDate(), time: '14:00', student: 'murid', teacher: 'Siti Rahayu', subject: 'Gitar', status: 'terjadwal' }
+                ];
+                localStorage.setItem('schedules', JSON.stringify(defaultSchedules));
+                addDebugLog("Default schedules initialized");
+            }
+            
+            if (!localStorage.getItem('videos')) {
+                const defaultVideos = [
+                    { id: 1, title: 'Dasar-dasar Piano', url: 'https://www.youtube.com/watch?v=example1', description: 'Video pembelajaran dasar-dasar piano untuk pemula' },
+                    { id: 2, title: 'Teknik Gitar Akustik', url: 'https://www.youtube.com/watch?v=example2', description: 'Teknik dasar bermain gitar akustik' }
+                ];
+                localStorage.setItem('videos', JSON.stringify(defaultVideos));
+                addDebugLog("Default videos initialized");
+            }
+            
+            if (!localStorage.getItem('grades')) {
+                const defaultGrades = [
+                    { id: 1, student: 'murid', subject: 'Piano', teacher: 'Budi Santoso', score: 85, date: getCurrentDate(), notes: 'Kemajuan baik dalam teknik dasar' },
+                    { id: 2, student: 'murid', subject: 'Gitar', teacher: 'Siti Rahayu', score: 78, date: getCurrentDate(), notes: 'Perlu lebih banyak latihan kunci' }
+                ];
+                localStorage.setItem('grades', JSON.stringify(defaultGrades));
+                addDebugLog("Default grades initialized");
+            }
         }
-        if (!localStorage.getItem('schedules')) {
-            const defaultSchedules = [
-                { id: 1, date: getCurrentDate(), time: '10:00', student: 'murid', teacher: 'Budi Santoso', subject: 'Piano', status: 'terjadwal' },
-                { id: 2, date: getCurrentDate(), time: '14:00', student: 'murid', teacher: 'Siti Rahayu', subject: 'Gitar', status: 'terjadwal' }
-            ];
-            localStorage.setItem('schedules', JSON.stringify(defaultSchedules));
-        }
-        if (!localStorage.getItem('videos')) {
-            const defaultVideos = [
-                { id: 1, title: 'Dasar-dasar Piano', url: 'https://www.youtube.com/watch?v=example1', description: 'Video pembelajaran dasar-dasar piano untuk pemula', type: 'youtube' },
-                { id: 2, title: 'Teknik Gitar Akustik', url: 'https://www.youtube.com/watch?v=example2', description: 'Teknik dasar bermain gitar akustik', type: 'youtube' }
-            ];
-            localStorage.setItem('videos', JSON.stringify(defaultVideos));
-        }
-        if (!localStorage.getItem('grades')) {
-            const defaultGrades = [
-                { id: 1, student: 'murid', subject: 'Piano', teacher: 'Budi Santoso', score: 85, date: getCurrentDate(), notes: 'Kemajuan baik dalam teknik dasar' },
-                { id: 2, student: 'murid', subject: 'Gitar', teacher: 'Siti Rahayu', score: 78, date: getCurrentDate(), notes: 'Perlu lebih banyak latihan kunci' }
-            ];
-            localStorage.setItem('grades', JSON.stringify(defaultGrades));
-        }
+
         // Helper functions
         function getCurrentDate() {
             const today = new Date();
@@ -1046,217 +1082,12 @@
             const day = String(today.getDate()).padStart(2, '0');
             return `${year}-${month}-${day}`;
         }
+
         function formatDate(dateString) {
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             return new Date(dateString).toLocaleDateString('id-ID', options);
         }
-        function getYouTubeEmbedUrl(url) {
-            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-            const match = url.match(regExp);
-            return (match && match[2].length === 11) ? `https://www.youtube.com/embed/${match[2]}` : null;
-        }
-        function getScoreClass(score) {
-            if (score >= 90) return 'score-excellent';
-            if (score >= 75) return 'score-good';
-            if (score >= 60) return 'score-average';
-            return 'score-poor';
-        }
-        function getScoreText(score) {
-            if (score >= 90) return 'Sangat Baik';
-            if (score >= 75) return 'Baik';
-            if (score >= 60) return 'Cukup';
-            return 'Kurang';
-        }
-        function getGradeCardClass(score) {
-            if (score >= 90) return 'grade-excellent';
-            if (score >= 75) return 'grade-good';
-            if (score >= 60) return 'grade-average';
-            return 'grade-poor';
-        }
-        function fileToBase64(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = error => reject(error);
-            });
-        }
-        function base64ToFileSize(base64String) {
-            // Remove data URL prefix
-            const base64 = base64String.split(',')[1];
-            // Calculate size in bytes
-            const sizeInBytes = (base64.length * 3) / 4;
-            return sizeInBytes;
-        }
-        // Video upload functionality
-        function setupVideoUpload() {
-            const uploadArea = document.getElementById('videoUploadArea');
-            const fileInput = document.getElementById('videoFile');
-            const preview = document.getElementById('videoPreview');
-            
-            // Click to upload
-            uploadArea.addEventListener('click', () => {
-                fileInput.click();
-            });
-            
-            // Drag and drop
-            uploadArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                uploadArea.classList.add('dragover');
-            });
-            
-            uploadArea.addEventListener('dragleave', () => {
-                uploadArea.classList.remove('dragover');
-            });
-            
-            uploadArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                uploadArea.classList.remove('dragover');
-                
-                const files = e.dataTransfer.files;
-                if (files.length > 0) {
-                    handleVideoFile(files[0]);
-                }
-            });
-            
-            // File input change
-            fileInput.addEventListener('change', (e) => {
-                if (e.target.files.length > 0) {
-                    handleVideoFile(e.target.files[0]);
-                }
-            });
-            
-            function handleVideoFile(file) {
-                // Check file type
-                if (!file.type.startsWith('video/')) {
-                    alert('Harap pilih file video!');
-                    return;
-                }
-                
-                // Check file size (50MB limit)
-                const maxSize = 50 * 1024 * 1024; // 50MB in bytes
-                if (file.size > maxSize) {
-                    alert('Ukuran file terlalu besar! Maksimal 50MB.');
-                    return;
-                }
-                
-                // Show preview
-                const url = URL.createObjectURL(file);
-                preview.src = url;
-                preview.classList.remove('hidden');
-                
-                // Store file data
-                preview.dataset.file = file;
-            }
-        }
-        
-        function setupEditVideoUpload() {
-            const uploadArea = document.getElementById('editVideoUploadArea');
-            const fileInput = document.getElementById('editVideoFile');
-            const preview = document.getElementById('editVideoPreview');
-            
-            // Click to upload
-            uploadArea.addEventListener('click', () => {
-                fileInput.click();
-            });
-            
-            // Drag and drop
-            uploadArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                uploadArea.classList.add('dragover');
-            });
-            
-            uploadArea.addEventListener('dragleave', () => {
-                uploadArea.classList.remove('dragover');
-            });
-            
-            uploadArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                uploadArea.classList.remove('dragover');
-                
-                const files = e.dataTransfer.files;
-                if (files.length > 0) {
-                    handleVideoFile(files[0]);
-                }
-            });
-            
-            // File input change
-            fileInput.addEventListener('change', (e) => {
-                if (e.target.files.length > 0) {
-                    handleVideoFile(e.target.files[0]);
-                }
-            });
-            
-            function handleVideoFile(file) {
-                // Check file type
-                if (!file.type.startsWith('video/')) {
-                    alert('Harap pilih file video!');
-                    return;
-                }
-                
-                // Check file size (50MB limit)
-                const maxSize = 50 * 1024 * 1024; // 50MB in bytes
-                if (file.size > maxSize) {
-                    alert('Ukuran file terlalu besar! Maksimal 50MB.');
-                    return;
-                }
-                
-                // Show preview
-                const url = URL.createObjectURL(file);
-                preview.src = url;
-                preview.classList.remove('hidden');
-                
-                // Store file data
-                preview.dataset.file = file;
-            }
-        }
-        
-        // Video type toggle
-        function setupVideoTypeToggle() {
-            const youtubeBtn = document.getElementById('youtubeVideoBtn');
-            const uploadBtn = document.getElementById('uploadVideoBtn');
-            const youtubeSection = document.getElementById('youtubeVideoSection');
-            const uploadSection = document.getElementById('uploadVideoSection');
-            
-            youtubeBtn.addEventListener('click', () => {
-                youtubeBtn.classList.add('active');
-                uploadBtn.classList.remove('active');
-                youtubeSection.classList.remove('hidden');
-                uploadSection.classList.add('hidden');
-            });
-            
-            uploadBtn.addEventListener('click', () => {
-                uploadBtn.classList.add('active');
-                youtubeBtn.classList.remove('active');
-                uploadSection.classList.remove('hidden');
-                youtubeSection.classList.add('hidden');
-            });
-        }
-        
-        function setupEditVideoTypeToggle() {
-            const youtubeBtn = document.getElementById('editYoutubeVideoBtn');
-            const uploadBtn = document.getElementById('editUploadVideoBtn');
-            const youtubeSection = document.getElementById('editYoutubeVideoSection');
-            const uploadSection = document.getElementById('editUploadVideoSection');
-            const typeInput = document.getElementById('editVideoType');
-            
-            youtubeBtn.addEventListener('click', () => {
-                youtubeBtn.classList.add('active');
-                uploadBtn.classList.remove('active');
-                youtubeSection.classList.remove('hidden');
-                uploadSection.classList.add('hidden');
-                typeInput.value = 'youtube';
-            });
-            
-            uploadBtn.addEventListener('click', () => {
-                uploadBtn.classList.add('active');
-                youtubeBtn.classList.remove('active');
-                uploadSection.classList.remove('hidden');
-                youtubeSection.classList.add('hidden');
-                typeInput.value = 'upload';
-            });
-        }
-        
+
         // Login functionality
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -1268,6 +1099,7 @@
             const user = users.find(u => u.username === username && u.password === password);
             
             if (user) {
+                currentUser = user;
                 localStorage.setItem('currentUser', JSON.stringify(user));
                 document.getElementById('loginPage').classList.add('hidden');
                 document.getElementById('dashboardPage').classList.remove('hidden');
@@ -1286,21 +1118,31 @@
                     document.querySelectorAll('.student-only').forEach(el => el.style.display = 'block');
                 }
                 
+                addDebugLog(`User logged in: ${user.username} (${user.role})`);
+                
+                // Load data from Firebase first
+                loadDataFromFirebase();
+                
                 // Load dashboard
                 loadDashboard();
             } else {
                 document.getElementById('loginAlert').classList.remove('hidden');
+                addDebugLog("Login failed: invalid credentials");
             }
         });
+
         // Logout functionality
         document.getElementById('logoutBtn').addEventListener('click', function() {
+            addDebugLog(`User logged out: ${currentUser ? currentUser.username : 'unknown'}`);
             localStorage.removeItem('currentUser');
+            currentUser = null;
             document.getElementById('dashboardPage').classList.add('hidden');
             document.getElementById('loginPage').classList.remove('hidden');
             document.getElementById('loginAlert').classList.add('hidden');
             document.getElementById('username').value = '';
             document.getElementById('password').value = '';
         });
+
         // Navigation
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', function(e) {
@@ -1316,25 +1158,10 @@
                 document.getElementById(page).classList.remove('hidden');
                 
                 // Load page data
-                if (page === 'dashboard') {
-                    loadDashboard();
-                } else if (page === 'schedule') {
-                    loadSchedule();
-                } else if (page === 'videos') {
-                    loadVideos();
-                } else if (page === 'grades') {
-                    loadGrades();
-                } else if (page === 'manage-users') {
-                    loadManageUsers();
-                } else if (page === 'manage-schedule') {
-                    loadManageSchedule();
-                } else if (page === 'manage-videos') {
-                    loadManageVideos();
-                } else if (page === 'manage-grades') {
-                    loadManageGrades();
-                }
+                refreshPage(page);
             });
         });
+
         // Load dashboard
         function loadDashboard() {
             const schedules = JSON.parse(localStorage.getItem('schedules'));
@@ -1375,49 +1202,11 @@
                     todaySchedulesContainer.appendChild(scheduleCard);
                 });
             }
-            
-            // Load student grades summary (for students only)
-            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-            if (currentUser && currentUser.role === 'murid') {
-                const grades = JSON.parse(localStorage.getItem('grades'));
-                const studentGrades = grades.filter(g => g.student === currentUser.username);
-                
-                const recentGradesContainer = document.getElementById('recentGrades');
-                recentGradesContainer.innerHTML = '';
-                
-                if (studentGrades.length === 0) {
-                    recentGradesContainer.innerHTML = '<p class="text-center text-muted">Belum ada nilai</p>';
-                } else {
-                    // Show only the 3 most recent grades
-                    const recentGrades = studentGrades
-                        .sort((a, b) => new Date(b.date) - new Date(a.date))
-                        .slice(0, 3);
-                    
-                    recentGrades.forEach(grade => {
-                        const gradeCard = document.createElement('div');
-                        gradeCard.className = `card grade-card ${getGradeCardClass(grade.score)} mb-3`;
-                        gradeCard.innerHTML = `
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h5 class="card-title">${grade.subject}</h5>
-                                        <p class="card-text mb-1"><i class="fas fa-user me-2"></i>${grade.teacher}</p>
-                                        <p class="card-text mb-0"><i class="fas fa-calendar me-2"></i>${formatDate(grade.date)}</p>
-                                    </div>
-                                    <span class="score-badge ${getScoreClass(grade.score)}">${grade.score}</span>
-                                </div>
-                                ${grade.notes ? `<p class="card-text mt-2"><i class="fas fa-sticky-note me-2"></i>${grade.notes}</p>` : ''}
-                            </div>
-                        `;
-                        recentGradesContainer.appendChild(gradeCard);
-                    });
-                }
-            }
         }
+
         // Load schedule page
         function loadSchedule() {
             const schedules = JSON.parse(localStorage.getItem('schedules'));
-            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
             const scheduleTableBody = document.getElementById('scheduleTableBody');
             scheduleTableBody.innerHTML = '';
             
@@ -1445,6 +1234,7 @@
                 });
             }
         }
+
         // Load videos page
         function loadVideos() {
             const videos = JSON.parse(localStorage.getItem('videos'));
@@ -1457,47 +1247,22 @@
                 videos.forEach(video => {
                     const videoItem = document.createElement('div');
                     videoItem.className = 'video-item';
-                    
-                    let videoContent = '';
-                    
-                    if (video.type === 'youtube') {
-                        const embedUrl = getYouTubeEmbedUrl(video.url);
-                        videoContent = `
-                            <div class="video-thumbnail">
-                                ${embedUrl ? 
-                                    `<iframe width="100%" height="150" src="${embedUrl}" frameborder="0" allowfullscreen></iframe>` : 
-                                    '<i class="fas fa-play-circle fa-3x text-muted"></i>'
-                                }
-                            </div>
-                        `;
-                    } else if (video.type === 'upload') {
-                        videoContent = `
-                            <div class="video-thumbnail">
-                                <video width="100%" height="150" controls>
-                                    <source src="${video.url}" type="video/mp4">
-                                    Browser Anda tidak mendukung tag video.
-                                </video>
-                            </div>
-                        `;
-                    }
-                    
                     videoItem.innerHTML = `
-                        ${videoContent}
+                        <div class="video-thumbnail">
+                            <i class="fas fa-play-circle fa-3x text-muted"></i>
+                        </div>
                         <h5>${video.title}</h5>
                         <p>${video.description}</p>
-                        ${video.type === 'youtube' ? 
-                            `<a href="${video.url}" target="_blank" class="btn btn-sm btn-primary-custom">Tonton di YouTube</a>` : 
-                            ''
-                        }
+                        <a href="${video.url}" target="_blank" class="btn btn-sm btn-primary-custom">Tonton di YouTube</a>
                     `;
                     videosList.appendChild(videoItem);
                 });
             }
         }
-        // Load grades page (for students)
+
+        // Load grades page
         function loadGrades() {
             const grades = JSON.parse(localStorage.getItem('grades'));
-            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
             const gradesList = document.getElementById('gradesList');
             gradesList.innerHTML = '';
             
@@ -1516,7 +1281,7 @@
                 
                 studentGrades.forEach(grade => {
                     const gradeCard = document.createElement('div');
-                    gradeCard.className = `card grade-card ${getGradeCardClass(grade.score)} mb-3`;
+                    gradeCard.className = `card grade-card mb-3`;
                     gradeCard.innerHTML = `
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center">
@@ -1525,10 +1290,7 @@
                                     <p class="card-text mb-1"><i class="fas fa-user me-2"></i>${grade.teacher}</p>
                                     <p class="card-text mb-0"><i class="fas fa-calendar me-2"></i>${formatDate(grade.date)}</p>
                                 </div>
-                                <div class="text-center">
-                                    <span class="score-badge ${getScoreClass(grade.score)}">${grade.score}</span>
-                                    <div class="mt-1">${getScoreText(grade.score)}</div>
-                                </div>
+                                <span class="badge bg-primary">${grade.score}</span>
                             </div>
                             ${grade.notes ? `<p class="card-text mt-2"><i class="fas fa-sticky-note me-2"></i>${grade.notes}</p>` : ''}
                         </div>
@@ -1537,6 +1299,7 @@
                 });
             }
         }
+
         // Load manage users page
         function loadManageUsers() {
             const users = JSON.parse(localStorage.getItem('users'));
@@ -1581,6 +1344,12 @@
                             const userId = parseInt(this.getAttribute('data-id'));
                             const updatedUsers = users.filter(u => u.id !== userId);
                             localStorage.setItem('users', JSON.stringify(updatedUsers));
+                            
+                            // Sync to Firebase
+                            if (isOnline) {
+                                saveDataToFirebase();
+                            }
+                            
                             loadManageUsers();
                         }
                     });
@@ -1590,6 +1359,7 @@
             // Populate student dropdowns
             populateStudentDropdowns();
         }
+
         // Load manage schedule page
         function loadManageSchedule() {
             const schedules = JSON.parse(localStorage.getItem('schedules'));
@@ -1643,6 +1413,12 @@
                             const scheduleId = parseInt(this.getAttribute('data-id'));
                             const updatedSchedules = schedules.filter(s => s.id !== scheduleId);
                             localStorage.setItem('schedules', JSON.stringify(updatedSchedules));
+                            
+                            // Sync to Firebase
+                            if (isOnline) {
+                                saveDataToFirebase();
+                            }
+                            
                             loadManageSchedule();
                         }
                     });
@@ -1652,6 +1428,7 @@
             // Populate student dropdowns
             populateStudentDropdowns();
         }
+
         // Load manage videos page
         function loadManageVideos() {
             const videos = JSON.parse(localStorage.getItem('videos'));
@@ -1664,32 +1441,10 @@
                 videos.forEach(video => {
                     const videoItem = document.createElement('div');
                     videoItem.className = 'video-item';
-                    
-                    let videoContent = '';
-                    
-                    if (video.type === 'youtube') {
-                        const embedUrl = getYouTubeEmbedUrl(video.url);
-                        videoContent = `
-                            <div class="video-thumbnail">
-                                ${embedUrl ? 
-                                    `<iframe width="100%" height="150" src="${embedUrl}" frameborder="0" allowfullscreen></iframe>` : 
-                                    '<i class="fas fa-play-circle fa-3x text-muted"></i>'
-                                }
-                            </div>
-                        `;
-                    } else if (video.type === 'upload') {
-                        videoContent = `
-                            <div class="video-thumbnail">
-                                <video width="100%" height="150" controls>
-                                    <source src="${video.url}" type="video/mp4">
-                                    Browser Anda tidak mendukung tag video.
-                                </video>
-                            </div>
-                        `;
-                    }
-                    
                     videoItem.innerHTML = `
-                        ${videoContent}
+                        <div class="video-thumbnail">
+                            <i class="fas fa-play-circle fa-3x text-muted"></i>
+                        </div>
                         <h5>${video.title}</h5>
                         <p>${video.description}</p>
                         <div class="d-flex">
@@ -1707,35 +1462,9 @@
                         const video = videos.find(v => v.id === videoId);
                         
                         document.getElementById('editVideoId').value = video.id;
-                        document.getElementById('editVideoType').value = video.type;
                         document.getElementById('editVideoTitle').value = video.title;
+                        document.getElementById('editVideoUrl').value = video.url;
                         document.getElementById('editVideoDescription').value = video.description;
-                        
-                        // Set video type
-                        const youtubeBtn = document.getElementById('editYoutubeVideoBtn');
-                        const uploadBtn = document.getElementById('editUploadVideoBtn');
-                        const youtubeSection = document.getElementById('editYoutubeVideoSection');
-                        const uploadSection = document.getElementById('editUploadVideoSection');
-                        const preview = document.getElementById('editVideoPreview');
-                        
-                        if (video.type === 'youtube') {
-                            youtubeBtn.classList.add('active');
-                            uploadBtn.classList.remove('active');
-                            youtubeSection.classList.remove('hidden');
-                            uploadSection.classList.add('hidden');
-                            document.getElementById('editVideoUrl').value = video.url;
-                            preview.classList.add('hidden');
-                        } else if (video.type === 'upload') {
-                            uploadBtn.classList.add('active');
-                            youtubeBtn.classList.remove('active');
-                            uploadSection.classList.remove('hidden');
-                            youtubeSection.classList.add('hidden');
-                            document.getElementById('editVideoData').value = video.url;
-                            
-                            // Show preview
-                            preview.src = video.url;
-                            preview.classList.remove('hidden');
-                        }
                         
                         const modal = new bootstrap.Modal(document.getElementById('editVideoModal'));
                         modal.show();
@@ -1748,18 +1477,19 @@
                             const videoId = parseInt(this.getAttribute('data-id'));
                             const updatedVideos = videos.filter(v => v.id !== videoId);
                             localStorage.setItem('videos', JSON.stringify(updatedVideos));
+                            
+                            // Sync to Firebase
+                            if (isOnline) {
+                                saveDataToFirebase();
+                            }
+                            
                             loadManageVideos();
                         }
                     });
                 });
             }
-            
-            // Setup video upload functionality
-            setupVideoUpload();
-            setupEditVideoUpload();
-            setupVideoTypeToggle();
-            setupEditVideoTypeToggle();
         }
+
         // Load manage grades page
         function loadManageGrades() {
             const grades = JSON.parse(localStorage.getItem('grades'));
@@ -1775,7 +1505,7 @@
                         <td>${grade.student}</td>
                         <td>${grade.subject}</td>
                         <td>${grade.teacher}</td>
-                        <td><span class="score-badge ${getScoreClass(grade.score)}">${grade.score}</span></td>
+                        <td><span class="badge bg-primary">${grade.score}</span></td>
                         <td>${formatDate(grade.date)}</td>
                         <td>
                             <button class="btn btn-sm btn-primary-custom me-1 edit-grade-btn" data-id="${grade.id}">Edit</button>
@@ -1810,6 +1540,12 @@
                             const gradeId = parseInt(this.getAttribute('data-id'));
                             const updatedGrades = grades.filter(g => g.id !== gradeId);
                             localStorage.setItem('grades', JSON.stringify(updatedGrades));
+                            
+                            // Sync to Firebase
+                            if (isOnline) {
+                                saveDataToFirebase();
+                            }
+                            
                             loadManageGrades();
                         }
                     });
@@ -1819,6 +1555,7 @@
             // Populate student dropdowns
             populateStudentDropdowns();
         }
+
         // Populate student dropdowns
         function populateStudentDropdowns() {
             const users = JSON.parse(localStorage.getItem('users'));
@@ -1868,6 +1605,7 @@
                 }
             });
         }
+
         // Save user
         document.getElementById('saveUserBtn').addEventListener('click', function() {
             const username = document.getElementById('newUsername').value;
@@ -1892,6 +1630,11 @@
             users.push(newUser);
             localStorage.setItem('users', JSON.stringify(users));
             
+            // Sync to Firebase
+            if (isOnline) {
+                saveDataToFirebase();
+            }
+            
             // Close modal and reset form
             bootstrap.Modal.getInstance(document.getElementById('addUserModal')).hide();
             document.getElementById('addUserForm').reset();
@@ -1899,6 +1642,7 @@
             // Reload page
             loadManageUsers();
         });
+
         // Update user
         document.getElementById('updateUserBtn').addEventListener('click', function() {
             const userId = parseInt(document.getElementById('editUserId').value);
@@ -1919,11 +1663,17 @@
                 
                 localStorage.setItem('users', JSON.stringify(users));
                 
+                // Sync to Firebase
+                if (isOnline) {
+                    saveDataToFirebase();
+                }
+                
                 // Close modal and reload
                 bootstrap.Modal.getInstance(document.getElementById('editUserModal')).hide();
                 loadManageUsers();
             }
         });
+
         // Save schedule
         document.getElementById('saveScheduleBtn').addEventListener('click', function() {
             const date = document.getElementById('scheduleDate').value;
@@ -1948,6 +1698,11 @@
             schedules.push(newSchedule);
             localStorage.setItem('schedules', JSON.stringify(schedules));
             
+            // Sync to Firebase
+            if (isOnline) {
+                saveDataToFirebase();
+            }
+            
             // Close modal and reset form
             bootstrap.Modal.getInstance(document.getElementById('addScheduleModal')).hide();
             document.getElementById('addScheduleForm').reset();
@@ -1955,6 +1710,7 @@
             // Reload page
             loadManageSchedule();
         });
+
         // Update schedule
         document.getElementById('updateScheduleBtn').addEventListener('click', function() {
             const scheduleId = parseInt(document.getElementById('editScheduleId').value);
@@ -1981,104 +1737,54 @@
                 
                 localStorage.setItem('schedules', JSON.stringify(schedules));
                 
+                // Sync to Firebase
+                if (isOnline) {
+                    saveDataToFirebase();
+                }
+                
                 // Close modal and reload
                 bootstrap.Modal.getInstance(document.getElementById('editScheduleModal')).hide();
                 loadManageSchedule();
             }
         });
+
         // Save video
-        document.getElementById('saveVideoBtn').addEventListener('click', async function() {
-            const youtubeBtn = document.getElementById('youtubeVideoBtn');
-            const uploadBtn = document.getElementById('uploadVideoBtn');
+        document.getElementById('saveVideoBtn').addEventListener('click', function() {
             const title = document.getElementById('videoTitle').value;
+            const url = document.getElementById('videoUrl').value;
             const description = document.getElementById('videoDescription').value;
-            
-            let videoType = '';
-            let videoUrl = '';
-            
-            if (youtubeBtn.classList.contains('active')) {
-                // YouTube video
-                videoType = 'youtube';
-                videoUrl = document.getElementById('videoUrl').value;
-                
-                if (!videoUrl) {
-                    alert('Harap masukkan URL YouTube!');
-                    return;
-                }
-            } else if (uploadBtn.classList.contains('active')) {
-                // Upload video
-                videoType = 'upload';
-                const preview = document.getElementById('videoPreview');
-                const file = preview.dataset.file;
-                
-                if (!file) {
-                    alert('Harap pilih file video!');
-                    return;
-                }
-                
-                // Convert file to base64
-                try {
-                    videoUrl = await fileToBase64(file);
-                } catch (error) {
-                    alert('Gagal mengupload video: ' + error.message);
-                    return;
-                }
-            }
             
             const videos = JSON.parse(localStorage.getItem('videos'));
             
             const newVideo = {
                 id: Date.now(),
                 title: title,
-                url: videoUrl,
-                description: description,
-                type: videoType
+                url: url,
+                description: description
             };
             
             videos.push(newVideo);
             localStorage.setItem('videos', JSON.stringify(videos));
             
+            // Sync to Firebase
+            if (isOnline) {
+                saveDataToFirebase();
+            }
+            
             // Close modal and reset form
             bootstrap.Modal.getInstance(document.getElementById('addVideoModal')).hide();
             document.getElementById('addVideoForm').reset();
-            document.getElementById('videoPreview').classList.add('hidden');
             
             // Reload page
             loadManageVideos();
         });
+
         // Update video
-        document.getElementById('updateVideoBtn').addEventListener('click', async function() {
+        document.getElementById('updateVideoBtn').addEventListener('click', function() {
             const videoId = parseInt(document.getElementById('editVideoId').value);
-            const videoType = document.getElementById('editVideoType').value;
             const title = document.getElementById('editVideoTitle').value;
+            const url = document.getElementById('editVideoUrl').value;
             const description = document.getElementById('editVideoDescription').value;
-            
-            let videoUrl = '';
-            
-            if (videoType === 'youtube') {
-                videoUrl = document.getElementById('editVideoUrl').value;
-                
-                if (!videoUrl) {
-                    alert('Harap masukkan URL YouTube!');
-                    return;
-                }
-            } else if (videoType === 'upload') {
-                const preview = document.getElementById('editVideoPreview');
-                const file = preview.dataset.file;
-                
-                if (file) {
-                    // New file uploaded
-                    try {
-                        videoUrl = await fileToBase64(file);
-                    } catch (error) {
-                        alert('Gagal mengupload video: ' + error.message);
-                        return;
-                    }
-                } else {
-                    // Use existing video data
-                    videoUrl = document.getElementById('editVideoData').value;
-                }
-            }
             
             const videos = JSON.parse(localStorage.getItem('videos'));
             const videoIndex = videos.findIndex(v => v.id === videoId);
@@ -2087,18 +1793,23 @@
                 videos[videoIndex] = {
                     id: videoId,
                     title: title,
-                    url: videoUrl,
-                    description: description,
-                    type: videoType
+                    url: url,
+                    description: description
                 };
                 
                 localStorage.setItem('videos', JSON.stringify(videos));
+                
+                // Sync to Firebase
+                if (isOnline) {
+                    saveDataToFirebase();
+                }
                 
                 // Close modal and reload
                 bootstrap.Modal.getInstance(document.getElementById('editVideoModal')).hide();
                 loadManageVideos();
             }
         });
+
         // Save grade
         document.getElementById('saveGradeBtn').addEventListener('click', function() {
             const student = document.getElementById('gradeStudent').value;
@@ -2123,6 +1834,11 @@
             grades.push(newGrade);
             localStorage.setItem('grades', JSON.stringify(grades));
             
+            // Sync to Firebase
+            if (isOnline) {
+                saveDataToFirebase();
+            }
+            
             // Close modal and reset form
             bootstrap.Modal.getInstance(document.getElementById('addGradeModal')).hide();
             document.getElementById('addGradeForm').reset();
@@ -2130,6 +1846,7 @@
             // Reload page
             loadManageGrades();
         });
+
         // Update grade
         document.getElementById('updateGradeBtn').addEventListener('click', function() {
             const gradeId = parseInt(document.getElementById('editGradeId').value);
@@ -2156,11 +1873,51 @@
                 
                 localStorage.setItem('grades', JSON.stringify(grades));
                 
+                // Sync to Firebase
+                if (isOnline) {
+                    saveDataToFirebase();
+                }
+                
                 // Close modal and reload
                 bootstrap.Modal.getInstance(document.getElementById('editGradeModal')).hide();
                 loadManageGrades();
             }
         });
+
+        // ======================================================
+        // INITIALIZATION
+        // ======================================================
+
+        // Initialize everything when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            addDebugLog("DOM loaded, initializing app...");
+            
+            // Initialize data
+            initializeData();
+            
+            // Initialize Firebase
+            if (initializeFirebase()) {
+                // Setup Firebase features
+                checkConnection();
+                setupRealtimeListener();
+                
+                // Load data from Firebase after a short delay
+                setTimeout(() => {
+                    loadDataFromFirebase();
+                }, 1000);
+                
+                addDebugLog("Firebase setup complete");
+            } else {
+                addDebugLog("Running in offline mode");
+            }
+        });
+
+        // Auto-save to Firebase every 30 seconds when online
+        setInterval(() => {
+            if (isOnline && currentUser) {
+                saveDataToFirebase();
+            }
+        }, 30000);
     </script>
 </body>
 </html>
