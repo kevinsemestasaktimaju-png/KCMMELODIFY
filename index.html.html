@@ -1,6 +1,12 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+
+<!-- Firebase SDKs (compat version) -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KCM MELODIFY</title>
@@ -317,6 +323,22 @@
             }
         }
     </style>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCUkpNvGbL6u6lO--A-CVRo7l_YonbfLqE",
+    authDomain: "kcmmelodify.firebaseapp.com",
+    projectId: "kcmmelodify",
+    storageBucket: "kcmmelodify.appspot.com",
+    messagingSenderId: "125757359761",
+    appId: "1:125757359761:web:00bd9bdefcac27ae0ba130",
+    measurementId: "G-FJFD3P7V6B"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+</script>
+
 </head>
 <body>
     <!-- Login Page -->
