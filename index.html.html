@@ -1,0 +1,2144 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KCM MELODIFY</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+        
+        .login-card {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        
+        .login-header {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .login-body {
+            padding: 30px;
+            background-color: white;
+        }
+        
+        .dashboard-header {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .sidebar {
+            background-color: var(--dark-color);
+            min-height: calc(100vh - 60px);
+            padding: 20px 0;
+            color: white;
+        }
+        
+        .sidebar .nav-link {
+            color: rgba(255,255,255,0.8);
+            padding: 12px 20px;
+            margin: 5px 0;
+            border-radius: 0;
+            transition: all 0.3s;
+        }
+        
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        .content {
+            padding: 20px;
+            background-color: white;
+            min-height: calc(100vh - 60px);
+        }
+        
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        
+        .card-header {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 10px 10px 0 0 !important;
+            font-weight: 600;
+        }
+        
+        .schedule-card {
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .schedule-card.completed {
+            border-left-color: var(--secondary-color);
+        }
+        
+        .schedule-card.cancelled {
+            border-left-color: var(--danger-color);
+        }
+        
+        .btn-primary-custom {
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary-custom:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-success-custom {
+            background-color: var(--secondary-color);
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-success-custom:hover {
+            background-color: #27ae60;
+        }
+        
+        .video-item {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+        
+        .video-item:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .video-thumbnail {
+            width: 100%;
+            height: 150px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        
+        .video-thumbnail video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            margin-right: 15px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
+        }
+        
+        .table th {
+            background-color: var(--dark-color);
+            color: white;
+        }
+        
+        .alert {
+            border: none;
+            border-radius: 5px;
+        }
+        
+        .grade-card {
+            border-left: 4px solid var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .grade-excellent {
+            border-left-color: var(--secondary-color);
+        }
+        
+        .grade-good {
+            border-left-color: var(--primary-color);
+        }
+        
+        .grade-average {
+            border-left-color: var(--warning-color);
+        }
+        
+        .grade-poor {
+            border-left-color: var(--danger-color);
+        }
+        
+        .score-badge {
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        
+        .score-excellent {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .score-good {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .score-average {
+            background-color: var(--warning-color);
+            color: white;
+        }
+        
+        .score-poor {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        .video-upload-area {
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .video-upload-area:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(52, 152, 219, 0.05);
+        }
+        
+        .video-upload-area.dragover {
+            border-color: var(--secondary-color);
+            background-color: rgba(46, 204, 113, 0.1);
+        }
+        
+        .video-preview {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        
+        .video-type-toggle {
+            display: flex;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .video-type-toggle .btn {
+            flex: 1;
+            border-radius: 0;
+        }
+        
+        .video-type-toggle .btn:first-child {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        
+        .video-type-toggle .btn:last-child {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+        
+        .video-type-toggle .btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                min-height: auto;
+                margin-bottom: 20px;
+            }
+            
+            .content {
+                min-height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage" class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <h3><i class="fas fa-music me-2"></i>KCM MELODIFY</h3>
+                <p class="mb-0">Silakan login untuk melanjutkan</p>
+            </div>
+            <div class="login-body">
+                <div id="loginAlert" class="alert alert-danger hidden" role="alert">
+                    Username atau password salah!
+                </div>
+                <form id="loginForm">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary-custom w-100">Login</button>
+                </form>
+                <div class="mt-3 text-center text-muted small">
+                    <p>Default Login:</p>
+                    <p>Admin: admin / admin123</p>
+                    <p>Murid: murid / murid123</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Dashboard -->
+    <div id="dashboardPage" class="hidden">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="container-fluid">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h3 class="mb-0"><i class="fas fa-music me-2"></i>Kcm Class</h3>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <span id="userRole" class="me-3"></span>
+                        <button id="logoutBtn" class="btn btn-sm btn-outline-light"><i class="fas fa-sign-out-alt me-1"></i>Logout</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-md-3 col-lg-2 sidebar">
+                    <div class="user-info">
+                        <div class="user-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>
+                            <h6 id="userDisplayName" class="mb-0"></h6>
+                            <small id="userRoleDisplay"></small>
+                        </div>
+                    </div>
+                    <nav class="nav flex-column">
+                        <a class="nav-link active" href="#" data-page="dashboard"><i class="fas fa-home me-2"></i>Dashboard</a>
+                        <a class="nav-link" href="#" data-page="schedule"><i class="fas fa-calendar-alt me-2"></i>Jadwal Les</a>
+                        <a class="nav-link" href="#" data-page="videos"><i class="fas fa-video me-2"></i>Video Pembelajaran</a>
+                        <a class="nav-link" href="#" data-page="grades"><i class="fas fa-star me-2"></i>Nilai Saya</a>
+                        <a class="nav-link admin-only" href="#" data-page="manage-users"><i class="fas fa-users-cog me-2"></i>Kelola Pengguna</a>
+                        <a class="nav-link admin-only" href="#" data-page="manage-schedule"><i class="fas fa-calendar-plus me-2"></i>Kelola Jadwal</a>
+                        <a class="nav-link admin-only" href="#" data-page="manage-videos"><i class="fas fa-film me-2"></i>Kelola Video</a>
+                        <a class="nav-link admin-only" href="#" data-page="manage-grades"><i class="fas fa-clipboard-check me-2"></i>Kelola Nilai</a>
+                    </nav>
+                </div>
+                <!-- Content -->
+                <div class="col-md-9 col-lg-10 content">
+                    <!-- Dashboard Page -->
+                    <div id="dashboard" class="content-page">
+                        <h4 class="mb-4">Dashboard</h4>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <div class="card text-white bg-primary">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Total Les Hari Ini</h5>
+                                        <h2 id="todayScheduleCount" class="text-center">0</h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="card text-white bg-success">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Selesai</h5>
+                                        <h2 id="completedCount" class="text-center">0</h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="card text-white bg-warning">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Dalam Proses</h5>
+                                        <h2 id="inProgressCount" class="text-center">0</h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <div class="card text-white bg-danger">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Dibatalkan</h5>
+                                        <h2 id="cancelledCount" class="text-center">0</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card mt-4">
+                            <div class="card-header">
+                                <h5 class="mb-0">Jadwal Les Hari Ini</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="todaySchedules">
+                                    <p class="text-center text-muted">Tidak ada jadwal les hari ini</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Student Grades Summary (for students only) -->
+                        <div id="studentGradesSummary" class="card mt-4 student-only">
+                            <div class="card-header">
+                                <h5 class="mb-0">Nilai Terbaru</h5>
+                            </div>
+                            <div class="card-body">
+                                <div id="recentGrades">
+                                    <p class="text-center text-muted">Belum ada nilai</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Schedule Page -->
+                    <div id="schedule" class="content-page hidden">
+                        <h4 class="mb-4">Jadwal Les</h4>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Tanggal</th>
+                                                <th>Jam</th>
+                                                <th>Guru</th>
+                                                <th>Mata Pelajaran</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="scheduleTableBody">
+                                            <tr>
+                                                <td colspan="5" class="text-center text-muted">Tidak ada jadwal les</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Videos Page -->
+                    <div id="videos" class="content-page hidden">
+                        <h4 class="mb-4">Video Pembelajaran</h4>
+                        <div id="videosList">
+                            <p class="text-center text-muted">Tidak ada video pembelajaran tersedia</p>
+                        </div>
+                    </div>
+                    <!-- Grades Page (Student Only) -->
+                    <div id="grades" class="content-page hidden student-page">
+                        <h4 class="mb-4">Nilai Saya</h4>
+                        <div class="card">
+                            <div class="card-body">
+                                <div id="gradesList">
+                                    <p class="text-center text-muted">Belum ada nilai</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Manage Users Page (Admin Only) -->
+                    <div id="manage-users" class="content-page hidden admin-page">
+                        <h4 class="mb-4">Kelola Pengguna</h4>
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Daftar Pengguna</h5>
+                                <button class="btn btn-success-custom btn-sm" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                                    <i class="fas fa-plus me-1"></i>Tambah Pengguna
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Username</th>
+                                                <th>Role</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="usersTableBody">
+                                            <tr>
+                                                <td colspan="3" class="text-center text-muted">Tidak ada pengguna</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Manage Schedule Page (Admin Only) -->
+                    <div id="manage-schedule" class="content-page hidden admin-page">
+                        <h4 class="mb-4">Kelola Jadwal</h4>
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Daftar Jadwal Les</h5>
+                                <button class="btn btn-success-custom btn-sm" data-bs-toggle="modal" data-bs-target="#addScheduleModal">
+                                    <i class="fas fa-plus me-1"></i>Tambah Jadwal
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Tanggal</th>
+                                                <th>Jam</th>
+                                                <th>Murid</th>
+                                                <th>Guru</th>
+                                                <th>Mata Pelajaran</th>
+                                                <th>Status</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="manageScheduleTableBody">
+                                            <tr>
+                                                <td colspan="7" class="text-center text-muted">Tidak ada jadwal les</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Manage Videos Page (Admin Only) -->
+                    <div id="manage-videos" class="content-page hidden admin-page">
+                        <h4 class="mb-4">Kelola Video</h4>
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Daftar Video Pembelajaran</h5>
+                                <button class="btn btn-success-custom btn-sm" data-bs-toggle="modal" data-bs-target="#addVideoModal">
+                                    <i class="fas fa-plus me-1"></i>Tambah Video
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div id="manageVideosList">
+                                    <p class="text-center text-muted">Tidak ada video pembelajaran tersedia</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Manage Grades Page (Admin Only) -->
+                    <div id="manage-grades" class="content-page hidden admin-page">
+                        <h4 class="mb-4">Kelola Nilai</h4>
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Daftar Nilai Murid</h5>
+                                <button class="btn btn-success-custom btn-sm" data-bs-toggle="modal" data-bs-target="#addGradeModal">
+                                    <i class="fas fa-plus me-1"></i>Tambah Nilai
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Murid</th>
+                                                <th>Mata Pelajaran</th>
+                                                <th>Guru</th>
+                                                <th>Nilai</th>
+                                                <th>Tanggal</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="manageGradesTableBody">
+                                            <tr>
+                                                <td colspan="6" class="text-center text-muted">Tidak ada data nilai</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Add User Modal -->
+    <div class="modal fade" id="addUserModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Tambah Pengguna</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addUserForm">
+                        <div class="mb-3">
+                            <label for="newUsername" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="newUsername" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newPassword" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="newPassword" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newRole" class="form-label">Role</label>
+                            <select class="form-select" id="newRole" required>
+                                <option value="murid">Murid</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary-custom" id="saveUserBtn">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Add Schedule Modal -->
+    <div class="modal fade" id="addScheduleModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Tambah Jadwal Les</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addScheduleForm">
+                        <div class="mb-3">
+                            <label for="scheduleDate" class="form-label">Tanggal</label>
+                            <input type="date" class="form-control" id="scheduleDate" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="scheduleTime" class="form-label">Jam</label>
+                            <input type="time" class="form-control" id="scheduleTime" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="scheduleStudent" class="form-label">Murid</label>
+                            <select class="form-select" id="scheduleStudent" required>
+                                <option value="">Pilih Murid</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="scheduleTeacher" class="form-label">Guru</label>
+                            <input type="text" class="form-control" id="scheduleTeacher" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="scheduleSubject" class="form-label">Mata Pelajaran</label>
+                            <input type="text" class="form-control" id="scheduleSubject" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="scheduleStatus" class="form-label">Status</label>
+                            <select class="form-select" id="scheduleStatus" required>
+                                <option value="terjadwal">Terjadwal</option>
+                                <option value="selesai">Selesai</option>
+                                <option value="dibatalkan">Dibatalkan</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary-custom" id="saveScheduleBtn">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Add Video Modal -->
+    <div class="modal fade" id="addVideoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Tambah Video Pembelajaran</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addVideoForm">
+                        <div class="video-type-toggle">
+                            <button type="button" class="btn btn-outline-primary active" id="youtubeVideoBtn">YouTube</button>
+                            <button type="button" class="btn btn-outline-primary" id="uploadVideoBtn">Upload Video</button>
+                        </div>
+                        
+                        <!-- YouTube Video Section -->
+                        <div id="youtubeVideoSection">
+                            <div class="mb-3">
+                                <label for="videoUrl" class="form-label">URL Video (YouTube)</label>
+                                <input type="text" class="form-control" id="videoUrl" placeholder="https://www.youtube.com/watch?v=...">
+                            </div>
+                        </div>
+                        
+                        <!-- Upload Video Section -->
+                        <div id="uploadVideoSection" class="hidden">
+                            <div class="mb-3">
+                                <label class="form-label">Upload Video</label>
+                                <div class="video-upload-area" id="videoUploadArea">
+                                    <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                                    <p>Klik atau drag & drop video di sini</p>
+                                    <p class="text-muted small">Format: MP4, WebM, OGG (Maksimal 50MB)</p>
+                                    <input type="file" id="videoFile" accept="video/*" class="hidden">
+                                </div>
+                                <video id="videoPreview" class="video-preview hidden" controls></video>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="videoTitle" class="form-label">Judul Video</label>
+                            <input type="text" class="form-control" id="videoTitle" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="videoDescription" class="form-label">Deskripsi</label>
+                            <textarea class="form-control" id="videoDescription" rows="3" required></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary-custom" id="saveVideoBtn">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Add Grade Modal -->
+    <div class="modal fade" id="addGradeModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Tambah Nilai</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addGradeForm">
+                        <div class="mb-3">
+                            <label for="gradeStudent" class="form-label">Murid</label>
+                            <select class="form-select" id="gradeStudent" required>
+                                <option value="">Pilih Murid</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="gradeSubject" class="form-label">Mata Pelajaran</label>
+                            <input type="text" class="form-control" id="gradeSubject" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="gradeTeacher" class="form-label">Guru</label>
+                            <input type="text" class="form-control" id="gradeTeacher" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="gradeScore" class="form-label">Nilai (0-100)</label>
+                            <input type="number" class="form-control" id="gradeScore" min="0" max="100" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="gradeDate" class="form-label">Tanggal</label>
+                            <input type="date" class="form-control" id="gradeDate" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="gradeNotes" class="form-label">Catatan</label>
+                            <textarea class="form-control" id="gradeNotes" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary-custom" id="saveGradeBtn">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Edit User Modal -->
+    <div class="modal fade" id="editUserModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Pengguna</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editUserForm">
+                        <input type="hidden" id="editUserId">
+                        <div class="mb-3">
+                            <label for="editUsername" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="editUsername" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editPassword" class="form-label">Password (Kosongkan jika tidak diubah)</label>
+                            <input type="password" class="form-control" id="editPassword">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editRole" class="form-label">Role</label>
+                            <select class="form-select" id="editRole" required>
+                                <option value="murid">Murid</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary-custom" id="updateUserBtn">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Edit Schedule Modal -->
+    <div class="modal fade" id="editScheduleModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Jadwal Les</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editScheduleForm">
+                        <input type="hidden" id="editScheduleId">
+                        <div class="mb-3">
+                            <label for="editScheduleDate" class="form-label">Tanggal</label>
+                            <input type="date" class="form-control" id="editScheduleDate" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editScheduleTime" class="form-label">Jam</label>
+                            <input type="time" class="form-control" id="editScheduleTime" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editScheduleStudent" class="form-label">Murid</label>
+                            <select class="form-select" id="editScheduleStudent" required>
+                                <option value="">Pilih Murid</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editScheduleTeacher" class="form-label">Guru</label>
+                            <input type="text" class="form-control" id="editScheduleTeacher" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editScheduleSubject" class="form-label">Mata Pelajaran</label>
+                            <input type="text" class="form-control" id="editScheduleSubject" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editScheduleStatus" class="form-label">Status</label>
+                            <select class="form-select" id="editScheduleStatus" required>
+                                <option value="terjadwal">Terjadwal</option>
+                                <option value="selesai">Selesai</option>
+                                <option value="dibatalkan">Dibatalkan</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary-custom" id="updateScheduleBtn">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Edit Video Modal -->
+    <div class="modal fade" id="editVideoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Video Pembelajaran</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editVideoForm">
+                        <input type="hidden" id="editVideoId">
+                        <input type="hidden" id="editVideoType">
+                        <input type="hidden" id="editVideoData">
+                        
+                        <div class="video-type-toggle">
+                            <button type="button" class="btn btn-outline-primary active" id="editYoutubeVideoBtn">YouTube</button>
+                            <button type="button" class="btn btn-outline-primary" id="editUploadVideoBtn">Upload Video</button>
+                        </div>
+                        
+                        <!-- YouTube Video Section -->
+                        <div id="editYoutubeVideoSection">
+                            <div class="mb-3">
+                                <label for="editVideoUrl" class="form-label">URL Video (YouTube)</label>
+                                <input type="text" class="form-control" id="editVideoUrl" placeholder="https://www.youtube.com/watch?v=...">
+                            </div>
+                        </div>
+                        
+                        <!-- Upload Video Section -->
+                        <div id="editUploadVideoSection" class="hidden">
+                            <div class="mb-3">
+                                <label class="form-label">Upload Video</label>
+                                <div class="video-upload-area" id="editVideoUploadArea">
+                                    <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                                    <p>Klik atau drag & drop video di sini</p>
+                                    <p class="text-muted small">Format: MP4, WebM, OGG (Maksimal 50MB)</p>
+                                    <input type="file" id="editVideoFile" accept="video/*" class="hidden">
+                                </div>
+                                <video id="editVideoPreview" class="video-preview hidden" controls></video>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="editVideoTitle" class="form-label">Judul Video</label>
+                            <input type="text" class="form-control" id="editVideoTitle" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editVideoDescription" class="form-label">Deskripsi</label>
+                            <textarea class="form-control" id="editVideoDescription" rows="3" required></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary-custom" id="updateVideoBtn">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Edit Grade Modal -->
+    <div class="modal fade" id="editGradeModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Nilai</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editGradeForm">
+                        <input type="hidden" id="editGradeId">
+                        <div class="mb-3">
+                            <label for="editGradeStudent" class="form-label">Murid</label>
+                            <select class="form-select" id="editGradeStudent" required>
+                                <option value="">Pilih Murid</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editGradeSubject" class="form-label">Mata Pelajaran</label>
+                            <input type="text" class="form-control" id="editGradeSubject" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editGradeTeacher" class="form-label">Guru</label>
+                            <input type="text" class="form-control" id="editGradeTeacher" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editGradeScore" class="form-label">Nilai (0-100)</label>
+                            <input type="number" class="form-control" id="editGradeScore" min="0" max="100" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editGradeDate" class="form-label">Tanggal</label>
+                            <input type="date" class="form-control" id="editGradeDate" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editGradeNotes" class="form-label">Catatan</label>
+                            <textarea class="form-control" id="editGradeNotes" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary-custom" id="updateGradeBtn">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Initialize data if not exists
+        if (!localStorage.getItem('users')) {
+            const defaultUsers = [
+                { id: 1, username: 'admin', password: 'admin123', role: 'admin' },
+                { id: 2, username: 'murid', password: 'murid123', role: 'murid' }
+            ];
+            localStorage.setItem('users', JSON.stringify(defaultUsers));
+        }
+        if (!localStorage.getItem('schedules')) {
+            const defaultSchedules = [
+                { id: 1, date: getCurrentDate(), time: '10:00', student: 'murid', teacher: 'Budi Santoso', subject: 'Piano', status: 'terjadwal' },
+                { id: 2, date: getCurrentDate(), time: '14:00', student: 'murid', teacher: 'Siti Rahayu', subject: 'Gitar', status: 'terjadwal' }
+            ];
+            localStorage.setItem('schedules', JSON.stringify(defaultSchedules));
+        }
+        if (!localStorage.getItem('videos')) {
+            const defaultVideos = [
+                { id: 1, title: 'Dasar-dasar Piano', url: 'https://www.youtube.com/watch?v=example1', description: 'Video pembelajaran dasar-dasar piano untuk pemula', type: 'youtube' },
+                { id: 2, title: 'Teknik Gitar Akustik', url: 'https://www.youtube.com/watch?v=example2', description: 'Teknik dasar bermain gitar akustik', type: 'youtube' }
+            ];
+            localStorage.setItem('videos', JSON.stringify(defaultVideos));
+        }
+        if (!localStorage.getItem('grades')) {
+            const defaultGrades = [
+                { id: 1, student: 'murid', subject: 'Piano', teacher: 'Budi Santoso', score: 85, date: getCurrentDate(), notes: 'Kemajuan baik dalam teknik dasar' },
+                { id: 2, student: 'murid', subject: 'Gitar', teacher: 'Siti Rahayu', score: 78, date: getCurrentDate(), notes: 'Perlu lebih banyak latihan kunci' }
+            ];
+            localStorage.setItem('grades', JSON.stringify(defaultGrades));
+        }
+        // Helper functions
+        function getCurrentDate() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+        function formatDate(dateString) {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('id-ID', options);
+        }
+        function getYouTubeEmbedUrl(url) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? `https://www.youtube.com/embed/${match[2]}` : null;
+        }
+        function getScoreClass(score) {
+            if (score >= 90) return 'score-excellent';
+            if (score >= 75) return 'score-good';
+            if (score >= 60) return 'score-average';
+            return 'score-poor';
+        }
+        function getScoreText(score) {
+            if (score >= 90) return 'Sangat Baik';
+            if (score >= 75) return 'Baik';
+            if (score >= 60) return 'Cukup';
+            return 'Kurang';
+        }
+        function getGradeCardClass(score) {
+            if (score >= 90) return 'grade-excellent';
+            if (score >= 75) return 'grade-good';
+            if (score >= 60) return 'grade-average';
+            return 'grade-poor';
+        }
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+        function base64ToFileSize(base64String) {
+            // Remove data URL prefix
+            const base64 = base64String.split(',')[1];
+            // Calculate size in bytes
+            const sizeInBytes = (base64.length * 3) / 4;
+            return sizeInBytes;
+        }
+        // Video upload functionality
+        function setupVideoUpload() {
+            const uploadArea = document.getElementById('videoUploadArea');
+            const fileInput = document.getElementById('videoFile');
+            const preview = document.getElementById('videoPreview');
+            
+            // Click to upload
+            uploadArea.addEventListener('click', () => {
+                fileInput.click();
+            });
+            
+            // Drag and drop
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+            
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('dragover');
+            });
+            
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleVideoFile(files[0]);
+                }
+            });
+            
+            // File input change
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    handleVideoFile(e.target.files[0]);
+                }
+            });
+            
+            function handleVideoFile(file) {
+                // Check file type
+                if (!file.type.startsWith('video/')) {
+                    alert('Harap pilih file video!');
+                    return;
+                }
+                
+                // Check file size (50MB limit)
+                const maxSize = 50 * 1024 * 1024; // 50MB in bytes
+                if (file.size > maxSize) {
+                    alert('Ukuran file terlalu besar! Maksimal 50MB.');
+                    return;
+                }
+                
+                // Show preview
+                const url = URL.createObjectURL(file);
+                preview.src = url;
+                preview.classList.remove('hidden');
+                
+                // Store file data
+                preview.dataset.file = file;
+            }
+        }
+        
+        function setupEditVideoUpload() {
+            const uploadArea = document.getElementById('editVideoUploadArea');
+            const fileInput = document.getElementById('editVideoFile');
+            const preview = document.getElementById('editVideoPreview');
+            
+            // Click to upload
+            uploadArea.addEventListener('click', () => {
+                fileInput.click();
+            });
+            
+            // Drag and drop
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+            
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('dragover');
+            });
+            
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleVideoFile(files[0]);
+                }
+            });
+            
+            // File input change
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    handleVideoFile(e.target.files[0]);
+                }
+            });
+            
+            function handleVideoFile(file) {
+                // Check file type
+                if (!file.type.startsWith('video/')) {
+                    alert('Harap pilih file video!');
+                    return;
+                }
+                
+                // Check file size (50MB limit)
+                const maxSize = 50 * 1024 * 1024; // 50MB in bytes
+                if (file.size > maxSize) {
+                    alert('Ukuran file terlalu besar! Maksimal 50MB.');
+                    return;
+                }
+                
+                // Show preview
+                const url = URL.createObjectURL(file);
+                preview.src = url;
+                preview.classList.remove('hidden');
+                
+                // Store file data
+                preview.dataset.file = file;
+            }
+        }
+        
+        // Video type toggle
+        function setupVideoTypeToggle() {
+            const youtubeBtn = document.getElementById('youtubeVideoBtn');
+            const uploadBtn = document.getElementById('uploadVideoBtn');
+            const youtubeSection = document.getElementById('youtubeVideoSection');
+            const uploadSection = document.getElementById('uploadVideoSection');
+            
+            youtubeBtn.addEventListener('click', () => {
+                youtubeBtn.classList.add('active');
+                uploadBtn.classList.remove('active');
+                youtubeSection.classList.remove('hidden');
+                uploadSection.classList.add('hidden');
+            });
+            
+            uploadBtn.addEventListener('click', () => {
+                uploadBtn.classList.add('active');
+                youtubeBtn.classList.remove('active');
+                uploadSection.classList.remove('hidden');
+                youtubeSection.classList.add('hidden');
+            });
+        }
+        
+        function setupEditVideoTypeToggle() {
+            const youtubeBtn = document.getElementById('editYoutubeVideoBtn');
+            const uploadBtn = document.getElementById('editUploadVideoBtn');
+            const youtubeSection = document.getElementById('editYoutubeVideoSection');
+            const uploadSection = document.getElementById('editUploadVideoSection');
+            const typeInput = document.getElementById('editVideoType');
+            
+            youtubeBtn.addEventListener('click', () => {
+                youtubeBtn.classList.add('active');
+                uploadBtn.classList.remove('active');
+                youtubeSection.classList.remove('hidden');
+                uploadSection.classList.add('hidden');
+                typeInput.value = 'youtube';
+            });
+            
+            uploadBtn.addEventListener('click', () => {
+                uploadBtn.classList.add('active');
+                youtubeBtn.classList.remove('active');
+                uploadSection.classList.remove('hidden');
+                youtubeSection.classList.add('hidden');
+                typeInput.value = 'upload';
+            });
+        }
+        
+        // Login functionality
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            const users = JSON.parse(localStorage.getItem('users'));
+            const user = users.find(u => u.username === username && u.password === password);
+            
+            if (user) {
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                document.getElementById('loginPage').classList.add('hidden');
+                document.getElementById('dashboardPage').classList.remove('hidden');
+                
+                // Set user info
+                document.getElementById('userDisplayName').textContent = user.username;
+                document.getElementById('userRoleDisplay').textContent = user.role === 'admin' ? 'Administrator' : 'Murid';
+                document.getElementById('userRole').textContent = user.role === 'admin' ? 'Admin' : 'Murid';
+                
+                // Show/hide admin and student elements
+                if (user.role === 'admin') {
+                    document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'block');
+                    document.querySelectorAll('.student-only').forEach(el => el.style.display = 'none');
+                } else {
+                    document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
+                    document.querySelectorAll('.student-only').forEach(el => el.style.display = 'block');
+                }
+                
+                // Load dashboard
+                loadDashboard();
+            } else {
+                document.getElementById('loginAlert').classList.remove('hidden');
+            }
+        });
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            localStorage.removeItem('currentUser');
+            document.getElementById('dashboardPage').classList.add('hidden');
+            document.getElementById('loginPage').classList.remove('hidden');
+            document.getElementById('loginAlert').classList.add('hidden');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        });
+        // Navigation
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Update active nav
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show selected page
+                const page = this.getAttribute('data-page');
+                document.querySelectorAll('.content-page').forEach(p => p.classList.add('hidden'));
+                document.getElementById(page).classList.remove('hidden');
+                
+                // Load page data
+                if (page === 'dashboard') {
+                    loadDashboard();
+                } else if (page === 'schedule') {
+                    loadSchedule();
+                } else if (page === 'videos') {
+                    loadVideos();
+                } else if (page === 'grades') {
+                    loadGrades();
+                } else if (page === 'manage-users') {
+                    loadManageUsers();
+                } else if (page === 'manage-schedule') {
+                    loadManageSchedule();
+                } else if (page === 'manage-videos') {
+                    loadManageVideos();
+                } else if (page === 'manage-grades') {
+                    loadManageGrades();
+                }
+            });
+        });
+        // Load dashboard
+        function loadDashboard() {
+            const schedules = JSON.parse(localStorage.getItem('schedules'));
+            const today = getCurrentDate();
+            const todaySchedules = schedules.filter(s => s.date === today);
+            
+            // Update counts
+            document.getElementById('todayScheduleCount').textContent = todaySchedules.length;
+            document.getElementById('completedCount').textContent = todaySchedules.filter(s => s.status === 'selesai').length;
+            document.getElementById('inProgressCount').textContent = todaySchedules.filter(s => s.status === 'terjadwal').length;
+            document.getElementById('cancelledCount').textContent = todaySchedules.filter(s => s.status === 'dibatalkan').length;
+            
+            // Load today schedules
+            const todaySchedulesContainer = document.getElementById('todaySchedules');
+            todaySchedulesContainer.innerHTML = '';
+            
+            if (todaySchedules.length === 0) {
+                todaySchedulesContainer.innerHTML = '<p class="text-center text-muted">Tidak ada jadwal les hari ini</p>';
+            } else {
+                todaySchedules.forEach(schedule => {
+                    const statusClass = schedule.status === 'selesai' ? 'completed' : (schedule.status === 'dibatalkan' ? 'cancelled' : '');
+                    const statusText = schedule.status === 'selesai' ? 'Selesai' : (schedule.status === 'dibatalkan' ? 'Dibatalkan' : 'Terjadwal');
+                    
+                    const scheduleCard = document.createElement('div');
+                    scheduleCard.className = `card schedule-card ${statusClass} mb-3`;
+                    scheduleCard.innerHTML = `
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="card-title">${schedule.subject}</h5>
+                                    <p class="card-text mb-1"><i class="fas fa-clock me-2"></i>${schedule.time}</p>
+                                    <p class="card-text mb-0"><i class="fas fa-user me-2"></i>${schedule.teacher}</p>
+                                </div>
+                                <span class="badge bg-${schedule.status === 'selesai' ? 'success' : (schedule.status === 'dibatalkan' ? 'danger' : 'primary')}">${statusText}</span>
+                            </div>
+                        </div>
+                    `;
+                    todaySchedulesContainer.appendChild(scheduleCard);
+                });
+            }
+            
+            // Load student grades summary (for students only)
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser && currentUser.role === 'murid') {
+                const grades = JSON.parse(localStorage.getItem('grades'));
+                const studentGrades = grades.filter(g => g.student === currentUser.username);
+                
+                const recentGradesContainer = document.getElementById('recentGrades');
+                recentGradesContainer.innerHTML = '';
+                
+                if (studentGrades.length === 0) {
+                    recentGradesContainer.innerHTML = '<p class="text-center text-muted">Belum ada nilai</p>';
+                } else {
+                    // Show only the 3 most recent grades
+                    const recentGrades = studentGrades
+                        .sort((a, b) => new Date(b.date) - new Date(a.date))
+                        .slice(0, 3);
+                    
+                    recentGrades.forEach(grade => {
+                        const gradeCard = document.createElement('div');
+                        gradeCard.className = `card grade-card ${getGradeCardClass(grade.score)} mb-3`;
+                        gradeCard.innerHTML = `
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h5 class="card-title">${grade.subject}</h5>
+                                        <p class="card-text mb-1"><i class="fas fa-user me-2"></i>${grade.teacher}</p>
+                                        <p class="card-text mb-0"><i class="fas fa-calendar me-2"></i>${formatDate(grade.date)}</p>
+                                    </div>
+                                    <span class="score-badge ${getScoreClass(grade.score)}">${grade.score}</span>
+                                </div>
+                                ${grade.notes ? `<p class="card-text mt-2"><i class="fas fa-sticky-note me-2"></i>${grade.notes}</p>` : ''}
+                            </div>
+                        `;
+                        recentGradesContainer.appendChild(gradeCard);
+                    });
+                }
+            }
+        }
+        // Load schedule page
+        function loadSchedule() {
+            const schedules = JSON.parse(localStorage.getItem('schedules'));
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            const scheduleTableBody = document.getElementById('scheduleTableBody');
+            scheduleTableBody.innerHTML = '';
+            
+            // Filter schedules by current user if student
+            let filteredSchedules = schedules;
+            if (currentUser && currentUser.role === 'murid') {
+                filteredSchedules = schedules.filter(s => s.student === currentUser.username);
+            }
+            
+            if (filteredSchedules.length === 0) {
+                scheduleTableBody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">Tidak ada jadwal les</td></tr>';
+            } else {
+                filteredSchedules.forEach(schedule => {
+                    const statusText = schedule.status === 'selesai' ? 'Selesai' : (schedule.status === 'dibatalkan' ? 'Dibatalkan' : 'Terjadwal');
+                    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${formatDate(schedule.date)}</td>
+                        <td>${schedule.time}</td>
+                        <td>${schedule.teacher}</td>
+                        <td>${schedule.subject}</td>
+                        <td><span class="badge bg-${schedule.status === 'selesai' ? 'success' : (schedule.status === 'dibatalkan' ? 'danger' : 'primary')}">${statusText}</span></td>
+                    `;
+                    scheduleTableBody.appendChild(row);
+                });
+            }
+        }
+        // Load videos page
+        function loadVideos() {
+            const videos = JSON.parse(localStorage.getItem('videos'));
+            const videosList = document.getElementById('videosList');
+            videosList.innerHTML = '';
+            
+            if (videos.length === 0) {
+                videosList.innerHTML = '<p class="text-center text-muted">Tidak ada video pembelajaran tersedia</p>';
+            } else {
+                videos.forEach(video => {
+                    const videoItem = document.createElement('div');
+                    videoItem.className = 'video-item';
+                    
+                    let videoContent = '';
+                    
+                    if (video.type === 'youtube') {
+                        const embedUrl = getYouTubeEmbedUrl(video.url);
+                        videoContent = `
+                            <div class="video-thumbnail">
+                                ${embedUrl ? 
+                                    `<iframe width="100%" height="150" src="${embedUrl}" frameborder="0" allowfullscreen></iframe>` : 
+                                    '<i class="fas fa-play-circle fa-3x text-muted"></i>'
+                                }
+                            </div>
+                        `;
+                    } else if (video.type === 'upload') {
+                        videoContent = `
+                            <div class="video-thumbnail">
+                                <video width="100%" height="150" controls>
+                                    <source src="${video.url}" type="video/mp4">
+                                    Browser Anda tidak mendukung tag video.
+                                </video>
+                            </div>
+                        `;
+                    }
+                    
+                    videoItem.innerHTML = `
+                        ${videoContent}
+                        <h5>${video.title}</h5>
+                        <p>${video.description}</p>
+                        ${video.type === 'youtube' ? 
+                            `<a href="${video.url}" target="_blank" class="btn btn-sm btn-primary-custom">Tonton di YouTube</a>` : 
+                            ''
+                        }
+                    `;
+                    videosList.appendChild(videoItem);
+                });
+            }
+        }
+        // Load grades page (for students)
+        function loadGrades() {
+            const grades = JSON.parse(localStorage.getItem('grades'));
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            const gradesList = document.getElementById('gradesList');
+            gradesList.innerHTML = '';
+            
+            if (!currentUser || currentUser.role !== 'murid') {
+                gradesList.innerHTML = '<p class="text-center text-muted">Anda tidak memiliki akses ke halaman ini</p>';
+                return;
+            }
+            
+            const studentGrades = grades.filter(g => g.student === currentUser.username);
+            
+            if (studentGrades.length === 0) {
+                gradesList.innerHTML = '<p class="text-center text-muted">Belum ada nilai</p>';
+            } else {
+                // Sort grades by date (newest first)
+                studentGrades.sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                studentGrades.forEach(grade => {
+                    const gradeCard = document.createElement('div');
+                    gradeCard.className = `card grade-card ${getGradeCardClass(grade.score)} mb-3`;
+                    gradeCard.innerHTML = `
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 class="card-title">${grade.subject}</h5>
+                                    <p class="card-text mb-1"><i class="fas fa-user me-2"></i>${grade.teacher}</p>
+                                    <p class="card-text mb-0"><i class="fas fa-calendar me-2"></i>${formatDate(grade.date)}</p>
+                                </div>
+                                <div class="text-center">
+                                    <span class="score-badge ${getScoreClass(grade.score)}">${grade.score}</span>
+                                    <div class="mt-1">${getScoreText(grade.score)}</div>
+                                </div>
+                            </div>
+                            ${grade.notes ? `<p class="card-text mt-2"><i class="fas fa-sticky-note me-2"></i>${grade.notes}</p>` : ''}
+                        </div>
+                    `;
+                    gradesList.appendChild(gradeCard);
+                });
+            }
+        }
+        // Load manage users page
+        function loadManageUsers() {
+            const users = JSON.parse(localStorage.getItem('users'));
+            const usersTableBody = document.getElementById('usersTableBody');
+            usersTableBody.innerHTML = '';
+            
+            if (users.length === 0) {
+                usersTableBody.innerHTML = '<tr><td colspan="3" class="text-center text-muted">Tidak ada pengguna</td></tr>';
+            } else {
+                users.forEach(user => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${user.username}</td>
+                        <td>${user.role === 'admin' ? 'Administrator' : 'Murid'}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary-custom me-1 edit-user-btn" data-id="${user.id}">Edit</button>
+                            <button class="btn btn-sm btn-danger delete-user-btn" data-id="${user.id}">Hapus</button>
+                        </td>
+                    `;
+                    usersTableBody.appendChild(row);
+                });
+                
+                // Add event listeners
+                document.querySelectorAll('.edit-user-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const userId = parseInt(this.getAttribute('data-id'));
+                        const user = users.find(u => u.id === userId);
+                        
+                        document.getElementById('editUserId').value = user.id;
+                        document.getElementById('editUsername').value = user.username;
+                        document.getElementById('editPassword').value = '';
+                        document.getElementById('editRole').value = user.role;
+                        
+                        const modal = new bootstrap.Modal(document.getElementById('editUserModal'));
+                        modal.show();
+                    });
+                });
+                
+                document.querySelectorAll('.delete-user-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        if (confirm('Apakah Anda yakin ingin menghapus pengguna ini?')) {
+                            const userId = parseInt(this.getAttribute('data-id'));
+                            const updatedUsers = users.filter(u => u.id !== userId);
+                            localStorage.setItem('users', JSON.stringify(updatedUsers));
+                            loadManageUsers();
+                        }
+                    });
+                });
+            }
+            
+            // Populate student dropdowns
+            populateStudentDropdowns();
+        }
+        // Load manage schedule page
+        function loadManageSchedule() {
+            const schedules = JSON.parse(localStorage.getItem('schedules'));
+            const manageScheduleTableBody = document.getElementById('manageScheduleTableBody');
+            manageScheduleTableBody.innerHTML = '';
+            
+            if (schedules.length === 0) {
+                manageScheduleTableBody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">Tidak ada jadwal les</td></tr>';
+            } else {
+                schedules.forEach(schedule => {
+                    const statusText = schedule.status === 'selesai' ? 'Selesai' : (schedule.status === 'dibatalkan' ? 'Dibatalkan' : 'Terjadwal');
+                    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${formatDate(schedule.date)}</td>
+                        <td>${schedule.time}</td>
+                        <td>${schedule.student}</td>
+                        <td>${schedule.teacher}</td>
+                        <td>${schedule.subject}</td>
+                        <td><span class="badge bg-${schedule.status === 'selesai' ? 'success' : (schedule.status === 'dibatalkan' ? 'danger' : 'primary')}">${statusText}</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-primary-custom me-1 edit-schedule-btn" data-id="${schedule.id}">Edit</button>
+                            <button class="btn btn-sm btn-danger delete-schedule-btn" data-id="${schedule.id}">Hapus</button>
+                        </td>
+                    `;
+                    manageScheduleTableBody.appendChild(row);
+                });
+                
+                // Add event listeners
+                document.querySelectorAll('.edit-schedule-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const scheduleId = parseInt(this.getAttribute('data-id'));
+                        const schedule = schedules.find(s => s.id === scheduleId);
+                        
+                        document.getElementById('editScheduleId').value = schedule.id;
+                        document.getElementById('editScheduleDate').value = schedule.date;
+                        document.getElementById('editScheduleTime').value = schedule.time;
+                        document.getElementById('editScheduleStudent').value = schedule.student;
+                        document.getElementById('editScheduleTeacher').value = schedule.teacher;
+                        document.getElementById('editScheduleSubject').value = schedule.subject;
+                        document.getElementById('editScheduleStatus').value = schedule.status;
+                        
+                        const modal = new bootstrap.Modal(document.getElementById('editScheduleModal'));
+                        modal.show();
+                    });
+                });
+                
+                document.querySelectorAll('.delete-schedule-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        if (confirm('Apakah Anda yakin ingin menghapus jadwal ini?')) {
+                            const scheduleId = parseInt(this.getAttribute('data-id'));
+                            const updatedSchedules = schedules.filter(s => s.id !== scheduleId);
+                            localStorage.setItem('schedules', JSON.stringify(updatedSchedules));
+                            loadManageSchedule();
+                        }
+                    });
+                });
+            }
+            
+            // Populate student dropdowns
+            populateStudentDropdowns();
+        }
+        // Load manage videos page
+        function loadManageVideos() {
+            const videos = JSON.parse(localStorage.getItem('videos'));
+            const manageVideosList = document.getElementById('manageVideosList');
+            manageVideosList.innerHTML = '';
+            
+            if (videos.length === 0) {
+                manageVideosList.innerHTML = '<p class="text-center text-muted">Tidak ada video pembelajaran tersedia</p>';
+            } else {
+                videos.forEach(video => {
+                    const videoItem = document.createElement('div');
+                    videoItem.className = 'video-item';
+                    
+                    let videoContent = '';
+                    
+                    if (video.type === 'youtube') {
+                        const embedUrl = getYouTubeEmbedUrl(video.url);
+                        videoContent = `
+                            <div class="video-thumbnail">
+                                ${embedUrl ? 
+                                    `<iframe width="100%" height="150" src="${embedUrl}" frameborder="0" allowfullscreen></iframe>` : 
+                                    '<i class="fas fa-play-circle fa-3x text-muted"></i>'
+                                }
+                            </div>
+                        `;
+                    } else if (video.type === 'upload') {
+                        videoContent = `
+                            <div class="video-thumbnail">
+                                <video width="100%" height="150" controls>
+                                    <source src="${video.url}" type="video/mp4">
+                                    Browser Anda tidak mendukung tag video.
+                                </video>
+                            </div>
+                        `;
+                    }
+                    
+                    videoItem.innerHTML = `
+                        ${videoContent}
+                        <h5>${video.title}</h5>
+                        <p>${video.description}</p>
+                        <div class="d-flex">
+                            <button class="btn btn-sm btn-primary-custom me-2 edit-video-btn" data-id="${video.id}">Edit</button>
+                            <button class="btn btn-sm btn-danger delete-video-btn" data-id="${video.id}">Hapus</button>
+                        </div>
+                    `;
+                    manageVideosList.appendChild(videoItem);
+                });
+                
+                // Add event listeners
+                document.querySelectorAll('.edit-video-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const videoId = parseInt(this.getAttribute('data-id'));
+                        const video = videos.find(v => v.id === videoId);
+                        
+                        document.getElementById('editVideoId').value = video.id;
+                        document.getElementById('editVideoType').value = video.type;
+                        document.getElementById('editVideoTitle').value = video.title;
+                        document.getElementById('editVideoDescription').value = video.description;
+                        
+                        // Set video type
+                        const youtubeBtn = document.getElementById('editYoutubeVideoBtn');
+                        const uploadBtn = document.getElementById('editUploadVideoBtn');
+                        const youtubeSection = document.getElementById('editYoutubeVideoSection');
+                        const uploadSection = document.getElementById('editUploadVideoSection');
+                        const preview = document.getElementById('editVideoPreview');
+                        
+                        if (video.type === 'youtube') {
+                            youtubeBtn.classList.add('active');
+                            uploadBtn.classList.remove('active');
+                            youtubeSection.classList.remove('hidden');
+                            uploadSection.classList.add('hidden');
+                            document.getElementById('editVideoUrl').value = video.url;
+                            preview.classList.add('hidden');
+                        } else if (video.type === 'upload') {
+                            uploadBtn.classList.add('active');
+                            youtubeBtn.classList.remove('active');
+                            uploadSection.classList.remove('hidden');
+                            youtubeSection.classList.add('hidden');
+                            document.getElementById('editVideoData').value = video.url;
+                            
+                            // Show preview
+                            preview.src = video.url;
+                            preview.classList.remove('hidden');
+                        }
+                        
+                        const modal = new bootstrap.Modal(document.getElementById('editVideoModal'));
+                        modal.show();
+                    });
+                });
+                
+                document.querySelectorAll('.delete-video-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        if (confirm('Apakah Anda yakin ingin menghapus video ini?')) {
+                            const videoId = parseInt(this.getAttribute('data-id'));
+                            const updatedVideos = videos.filter(v => v.id !== videoId);
+                            localStorage.setItem('videos', JSON.stringify(updatedVideos));
+                            loadManageVideos();
+                        }
+                    });
+                });
+            }
+            
+            // Setup video upload functionality
+            setupVideoUpload();
+            setupEditVideoUpload();
+            setupVideoTypeToggle();
+            setupEditVideoTypeToggle();
+        }
+        // Load manage grades page
+        function loadManageGrades() {
+            const grades = JSON.parse(localStorage.getItem('grades'));
+            const manageGradesTableBody = document.getElementById('manageGradesTableBody');
+            manageGradesTableBody.innerHTML = '';
+            
+            if (grades.length === 0) {
+                manageGradesTableBody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">Tidak ada data nilai</td></tr>';
+            } else {
+                grades.forEach(grade => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${grade.student}</td>
+                        <td>${grade.subject}</td>
+                        <td>${grade.teacher}</td>
+                        <td><span class="score-badge ${getScoreClass(grade.score)}">${grade.score}</span></td>
+                        <td>${formatDate(grade.date)}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary-custom me-1 edit-grade-btn" data-id="${grade.id}">Edit</button>
+                            <button class="btn btn-sm btn-danger delete-grade-btn" data-id="${grade.id}">Hapus</button>
+                        </td>
+                    `;
+                    manageGradesTableBody.appendChild(row);
+                });
+                
+                // Add event listeners
+                document.querySelectorAll('.edit-grade-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const gradeId = parseInt(this.getAttribute('data-id'));
+                        const grade = grades.find(g => g.id === gradeId);
+                        
+                        document.getElementById('editGradeId').value = grade.id;
+                        document.getElementById('editGradeStudent').value = grade.student;
+                        document.getElementById('editGradeSubject').value = grade.subject;
+                        document.getElementById('editGradeTeacher').value = grade.teacher;
+                        document.getElementById('editGradeScore').value = grade.score;
+                        document.getElementById('editGradeDate').value = grade.date;
+                        document.getElementById('editGradeNotes').value = grade.notes || '';
+                        
+                        const modal = new bootstrap.Modal(document.getElementById('editGradeModal'));
+                        modal.show();
+                    });
+                });
+                
+                document.querySelectorAll('.delete-grade-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        if (confirm('Apakah Anda yakin ingin menghapus nilai ini?')) {
+                            const gradeId = parseInt(this.getAttribute('data-id'));
+                            const updatedGrades = grades.filter(g => g.id !== gradeId);
+                            localStorage.setItem('grades', JSON.stringify(updatedGrades));
+                            loadManageGrades();
+                        }
+                    });
+                });
+            }
+            
+            // Populate student dropdowns
+            populateStudentDropdowns();
+        }
+        // Populate student dropdowns
+        function populateStudentDropdowns() {
+            const users = JSON.parse(localStorage.getItem('users'));
+            const students = users.filter(u => u.role === 'murid');
+            
+            // Schedule dropdowns
+            const scheduleStudentDropdowns = [
+                document.getElementById('scheduleStudent'),
+                document.getElementById('editScheduleStudent')
+            ];
+            
+            scheduleStudentDropdowns.forEach(dropdown => {
+                if (dropdown) {
+                    const currentValue = dropdown.value;
+                    dropdown.innerHTML = '<option value="">Pilih Murid</option>';
+                    
+                    students.forEach(student => {
+                        const option = document.createElement('option');
+                        option.value = student.username;
+                        option.textContent = student.username;
+                        dropdown.appendChild(option);
+                    });
+                    
+                    dropdown.value = currentValue;
+                }
+            });
+            
+            // Grade dropdowns
+            const gradeStudentDropdowns = [
+                document.getElementById('gradeStudent'),
+                document.getElementById('editGradeStudent')
+            ];
+            
+            gradeStudentDropdowns.forEach(dropdown => {
+                if (dropdown) {
+                    const currentValue = dropdown.value;
+                    dropdown.innerHTML = '<option value="">Pilih Murid</option>';
+                    
+                    students.forEach(student => {
+                        const option = document.createElement('option');
+                        option.value = student.username;
+                        option.textContent = student.username;
+                        dropdown.appendChild(option);
+                    });
+                    
+                    dropdown.value = currentValue;
+                }
+            });
+        }
+        // Save user
+        document.getElementById('saveUserBtn').addEventListener('click', function() {
+            const username = document.getElementById('newUsername').value;
+            const password = document.getElementById('newPassword').value;
+            const role = document.getElementById('newRole').value;
+            
+            const users = JSON.parse(localStorage.getItem('users'));
+            
+            // Check if username already exists
+            if (users.some(u => u.username === username)) {
+                alert('Username sudah digunakan!');
+                return;
+            }
+            
+            const newUser = {
+                id: Date.now(),
+                username: username,
+                password: password,
+                role: role
+            };
+            
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            // Close modal and reset form
+            bootstrap.Modal.getInstance(document.getElementById('addUserModal')).hide();
+            document.getElementById('addUserForm').reset();
+            
+            // Reload page
+            loadManageUsers();
+        });
+        // Update user
+        document.getElementById('updateUserBtn').addEventListener('click', function() {
+            const userId = parseInt(document.getElementById('editUserId').value);
+            const username = document.getElementById('editUsername').value;
+            const password = document.getElementById('editPassword').value;
+            const role = document.getElementById('editRole').value;
+            
+            const users = JSON.parse(localStorage.getItem('users'));
+            const userIndex = users.findIndex(u => u.id === userId);
+            
+            if (userIndex !== -1) {
+                users[userIndex].username = username;
+                users[userIndex].role = role;
+                
+                if (password) {
+                    users[userIndex].password = password;
+                }
+                
+                localStorage.setItem('users', JSON.stringify(users));
+                
+                // Close modal and reload
+                bootstrap.Modal.getInstance(document.getElementById('editUserModal')).hide();
+                loadManageUsers();
+            }
+        });
+        // Save schedule
+        document.getElementById('saveScheduleBtn').addEventListener('click', function() {
+            const date = document.getElementById('scheduleDate').value;
+            const time = document.getElementById('scheduleTime').value;
+            const student = document.getElementById('scheduleStudent').value;
+            const teacher = document.getElementById('scheduleTeacher').value;
+            const subject = document.getElementById('scheduleSubject').value;
+            const status = document.getElementById('scheduleStatus').value;
+            
+            const schedules = JSON.parse(localStorage.getItem('schedules'));
+            
+            const newSchedule = {
+                id: Date.now(),
+                date: date,
+                time: time,
+                student: student,
+                teacher: teacher,
+                subject: subject,
+                status: status
+            };
+            
+            schedules.push(newSchedule);
+            localStorage.setItem('schedules', JSON.stringify(schedules));
+            
+            // Close modal and reset form
+            bootstrap.Modal.getInstance(document.getElementById('addScheduleModal')).hide();
+            document.getElementById('addScheduleForm').reset();
+            
+            // Reload page
+            loadManageSchedule();
+        });
+        // Update schedule
+        document.getElementById('updateScheduleBtn').addEventListener('click', function() {
+            const scheduleId = parseInt(document.getElementById('editScheduleId').value);
+            const date = document.getElementById('editScheduleDate').value;
+            const time = document.getElementById('editScheduleTime').value;
+            const student = document.getElementById('editScheduleStudent').value;
+            const teacher = document.getElementById('editScheduleTeacher').value;
+            const subject = document.getElementById('editScheduleSubject').value;
+            const status = document.getElementById('editScheduleStatus').value;
+            
+            const schedules = JSON.parse(localStorage.getItem('schedules'));
+            const scheduleIndex = schedules.findIndex(s => s.id === scheduleId);
+            
+            if (scheduleIndex !== -1) {
+                schedules[scheduleIndex] = {
+                    id: scheduleId,
+                    date: date,
+                    time: time,
+                    student: student,
+                    teacher: teacher,
+                    subject: subject,
+                    status: status
+                };
+                
+                localStorage.setItem('schedules', JSON.stringify(schedules));
+                
+                // Close modal and reload
+                bootstrap.Modal.getInstance(document.getElementById('editScheduleModal')).hide();
+                loadManageSchedule();
+            }
+        });
+        // Save video
+        document.getElementById('saveVideoBtn').addEventListener('click', async function() {
+            const youtubeBtn = document.getElementById('youtubeVideoBtn');
+            const uploadBtn = document.getElementById('uploadVideoBtn');
+            const title = document.getElementById('videoTitle').value;
+            const description = document.getElementById('videoDescription').value;
+            
+            let videoType = '';
+            let videoUrl = '';
+            
+            if (youtubeBtn.classList.contains('active')) {
+                // YouTube video
+                videoType = 'youtube';
+                videoUrl = document.getElementById('videoUrl').value;
+                
+                if (!videoUrl) {
+                    alert('Harap masukkan URL YouTube!');
+                    return;
+                }
+            } else if (uploadBtn.classList.contains('active')) {
+                // Upload video
+                videoType = 'upload';
+                const preview = document.getElementById('videoPreview');
+                const file = preview.dataset.file;
+                
+                if (!file) {
+                    alert('Harap pilih file video!');
+                    return;
+                }
+                
+                // Convert file to base64
+                try {
+                    videoUrl = await fileToBase64(file);
+                } catch (error) {
+                    alert('Gagal mengupload video: ' + error.message);
+                    return;
+                }
+            }
+            
+            const videos = JSON.parse(localStorage.getItem('videos'));
+            
+            const newVideo = {
+                id: Date.now(),
+                title: title,
+                url: videoUrl,
+                description: description,
+                type: videoType
+            };
+            
+            videos.push(newVideo);
+            localStorage.setItem('videos', JSON.stringify(videos));
+            
+            // Close modal and reset form
+            bootstrap.Modal.getInstance(document.getElementById('addVideoModal')).hide();
+            document.getElementById('addVideoForm').reset();
+            document.getElementById('videoPreview').classList.add('hidden');
+            
+            // Reload page
+            loadManageVideos();
+        });
+        // Update video
+        document.getElementById('updateVideoBtn').addEventListener('click', async function() {
+            const videoId = parseInt(document.getElementById('editVideoId').value);
+            const videoType = document.getElementById('editVideoType').value;
+            const title = document.getElementById('editVideoTitle').value;
+            const description = document.getElementById('editVideoDescription').value;
+            
+            let videoUrl = '';
+            
+            if (videoType === 'youtube') {
+                videoUrl = document.getElementById('editVideoUrl').value;
+                
+                if (!videoUrl) {
+                    alert('Harap masukkan URL YouTube!');
+                    return;
+                }
+            } else if (videoType === 'upload') {
+                const preview = document.getElementById('editVideoPreview');
+                const file = preview.dataset.file;
+                
+                if (file) {
+                    // New file uploaded
+                    try {
+                        videoUrl = await fileToBase64(file);
+                    } catch (error) {
+                        alert('Gagal mengupload video: ' + error.message);
+                        return;
+                    }
+                } else {
+                    // Use existing video data
+                    videoUrl = document.getElementById('editVideoData').value;
+                }
+            }
+            
+            const videos = JSON.parse(localStorage.getItem('videos'));
+            const videoIndex = videos.findIndex(v => v.id === videoId);
+            
+            if (videoIndex !== -1) {
+                videos[videoIndex] = {
+                    id: videoId,
+                    title: title,
+                    url: videoUrl,
+                    description: description,
+                    type: videoType
+                };
+                
+                localStorage.setItem('videos', JSON.stringify(videos));
+                
+                // Close modal and reload
+                bootstrap.Modal.getInstance(document.getElementById('editVideoModal')).hide();
+                loadManageVideos();
+            }
+        });
+        // Save grade
+        document.getElementById('saveGradeBtn').addEventListener('click', function() {
+            const student = document.getElementById('gradeStudent').value;
+            const subject = document.getElementById('gradeSubject').value;
+            const teacher = document.getElementById('gradeTeacher').value;
+            const score = parseInt(document.getElementById('gradeScore').value);
+            const date = document.getElementById('gradeDate').value;
+            const notes = document.getElementById('gradeNotes').value;
+            
+            const grades = JSON.parse(localStorage.getItem('grades'));
+            
+            const newGrade = {
+                id: Date.now(),
+                student: student,
+                subject: subject,
+                teacher: teacher,
+                score: score,
+                date: date,
+                notes: notes
+            };
+            
+            grades.push(newGrade);
+            localStorage.setItem('grades', JSON.stringify(grades));
+            
+            // Close modal and reset form
+            bootstrap.Modal.getInstance(document.getElementById('addGradeModal')).hide();
+            document.getElementById('addGradeForm').reset();
+            
+            // Reload page
+            loadManageGrades();
+        });
+        // Update grade
+        document.getElementById('updateGradeBtn').addEventListener('click', function() {
+            const gradeId = parseInt(document.getElementById('editGradeId').value);
+            const student = document.getElementById('editGradeStudent').value;
+            const subject = document.getElementById('editGradeSubject').value;
+            const teacher = document.getElementById('editGradeTeacher').value;
+            const score = parseInt(document.getElementById('editGradeScore').value);
+            const date = document.getElementById('editGradeDate').value;
+            const notes = document.getElementById('editGradeNotes').value;
+            
+            const grades = JSON.parse(localStorage.getItem('grades'));
+            const gradeIndex = grades.findIndex(g => g.id === gradeId);
+            
+            if (gradeIndex !== -1) {
+                grades[gradeIndex] = {
+                    id: gradeId,
+                    student: student,
+                    subject: subject,
+                    teacher: teacher,
+                    score: score,
+                    date: date,
+                    notes: notes
+                };
+                
+                localStorage.setItem('grades', JSON.stringify(grades));
+                
+                // Close modal and reload
+                bootstrap.Modal.getInstance(document.getElementById('editGradeModal')).hide();
+                loadManageGrades();
+            }
+        });
+    </script>
+</body>
+</html>
